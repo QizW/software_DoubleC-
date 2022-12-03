@@ -1,0 +1,18 @@
+{
+  "name": "double-c",
+  "version": "1.0.0",
+  "description": "project for software requirement enginerring, 2021-2022, ZJU",
+  "main": "index.js",
+  "scripts": {
+    "client-install": "cd client && npm install",
+    "server-install": "cd backend && npm install",
+    "install-dependencies": "npm run server-install && npm run client-install",
+    "server": "cd backend && nodemon server.js --ignore client",
+    "client": "cd client && npm start"
+  },
+  "author": "zhu_echen",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
