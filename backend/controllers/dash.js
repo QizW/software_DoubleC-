@@ -1,6 +1,7 @@
 const asyncWrapper = require("../middleware/async");
 const { createCustomError } = require("../errors/custom-error");
 const RepoSchema = require("../models/repo");
+//mongodb b站有教程，有时间我去康康
 const ObjectId = require("mongodb").ObjectId;
 
 const { Octokit } = require("@octokit/core");
@@ -9,12 +10,15 @@ const octokit = new Octokit({
   auth: `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`, // token
 });
 
+//
 const GetMessage = async (req, res) => {
   try {
+    //调用github接获取信息
     const repoMessage = await octokit.request("GET /repos/{owner}/{repo}", {
       owner: req.body.owner,
       repo: req.body.repoName,
     });
+    //这是在干嘛?看起来在插入数据库，应该是这样
     const CreateRepo = await RepoSchema.create({
       name: repoMessage.data.name,
       owner: repoMessage.data.owner.login,
@@ -54,8 +58,10 @@ const GetMessage = async (req, res) => {
   }
 };
 
+//搜索repo
 const SearchRepoName = async (req, res) => {
   try {
+    //不清楚这个req.body里面有啥，但是可以确定 RepoSchema是定义好的访问数据库的实体，调用的是nodejs mongodb库的函数 trim函数移除两侧空白字符 
     const SearchKey = req.body.search.trim();
     if (SearchKey == "") {
       var search = await RepoSchema.find({});
@@ -82,6 +88,7 @@ const SearchRepoName = async (req, res) => {
   }
 };
 
+//根据id搜索
 const GetDashboard = async (req, res) => {
   try {
     const detail = await RepoSchema.findOne({ _id: ObjectId(req.body.id) });
@@ -90,7 +97,7 @@ const GetDashboard = async (req, res) => {
     res.status(404).json(err);
   }
 };
-
+//根据id删除
 const DeleteRepo = async (req, res) => {
   try {
     const test = await RepoSchema.deleteOne({ _id: ObjectId(req.body.id) });
@@ -99,7 +106,7 @@ const DeleteRepo = async (req, res) => {
     res.status(404).json(err);
   }
 };
-
+//获取提交的频率
 const RepoGetCommitFrequency = async (owner, name) => {
   const repoMessage = await octokit.request(
     "GET /repos/{owner}/{repo}/commits",
@@ -110,7 +117,7 @@ const RepoGetCommitFrequency = async (owner, name) => {
       page: 1,
     }
   );
-
+  //获取commits数，看起来这个接口一下只能获取一页的数据，用循环的方式去查看有没有下一页
   if (repoMessage.data.length == 0) return { 2021: "0", 2020: "0", 2019: "0" };
   for (var i = 2; i <= 5; i++) {
     const NextRepoMessage = await octokit.request(
@@ -125,17 +132,18 @@ const RepoGetCommitFrequency = async (owner, name) => {
     if (NextRepoMessage.data.length == 0) break;
     else repoMessage.data = repoMessage.data.concat(NextRepoMessage.data);
   }
-
+//获取最早和最晚的提交时间
   const x1 = repoMessage.data[0].commit.committer.date;
   const x2 =
     repoMessage.data[repoMessage.data.length - 1].commit.committer.date;
   const t1 = TransDate(x1);
   const t2 = TransDate(x2);
   var frequency = {};
-
+//Transdate看起来是转换成年月了
   if (t1 - t2 < 2) {
     frequency = CountDayCommit(repoMessage);
   } else if (t1 - t2 > 15) {
+    //floor向下取整
     year1 = Math.floor(t1 / 12);
     year2 = Math.floor(t2 / 12);
     frequency = CountYearCommit(year1, year2, repoMessage.data);
@@ -145,13 +153,16 @@ const RepoGetCommitFrequency = async (owner, name) => {
   return frequency;
 };
 
+//统计日提交
 const CountDayCommit = (Msg) => {
   var order = {};
   var result = {};
 
   for (var i in Msg.data) {
     var t = Msg.data[i].commit.committer.date.substring(0, 10);
+    //又是库
     formalLength = Object.keys(order).length;
+    //统计时间
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
@@ -179,6 +190,7 @@ const CountDayCommit = (Msg) => {
   return answer;
 };
 
+//获取Issue频率
 const RepoGetIssueFrequency = async (owner, name) => {
   const repoMessage = await octokit.request(
     "GET /repos/{owner}/{repo}/issues",
@@ -189,7 +201,7 @@ const RepoGetIssueFrequency = async (owner, name) => {
       page: 1,
     }
   );
-
+    //和前面同理
   if (repoMessage.data.length == 0) return { 2021: "0", 2020: "0", 2019: "0" };
   for (var i = 2; i <= 5; i++) {
     const NextRepoMessage = await octokit.request(
@@ -222,7 +234,7 @@ const RepoGetIssueFrequency = async (owner, name) => {
   }
   return frequency;
 };
-
+//和前面同理
 const CountDayIssue = (Msg) => {
   var order = {};
   var result = {};
@@ -264,7 +276,7 @@ const TransDate = (date) => {
   month1 = parseInt(month, 10);
   return (year1 - 2000) * 12 + month1 - 1;
 };
-
+//统计年份
 const CountYearCommit = (year1, year2, commitmsg) => {
   var countNum = new Array(year1 - year2 + 1).fill(0);
   commitmsg.map((x) => {
@@ -280,7 +292,7 @@ const CountYearCommit = (year1, year2, commitmsg) => {
   }
   return obj;
 };
-
+//同上
 const CountYearIssue = (year1, year2, commitmsg) => {
   var countNum = new Array(year1 - year2 + 1).fill(0);
   commitmsg.map((x) => {

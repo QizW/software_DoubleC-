@@ -1,6 +1,6 @@
 class CustomAPIError extends Error {
     constructor(message, statusCode) {
-        super(message)
+        super(message)//继承父类Error的message
         this.statusCode = statusCode
     }
 }

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+//详情见Repo，这里存的是用户规则，后续我要完善这个仓库规则
 const User = new mongoose.Schema({
     username: {
         type: String,
