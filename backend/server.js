@@ -15,6 +15,11 @@ const connectDB = require("./db/connect");
 const notFound = require("./middleware/notfound");
 //引入自定义的错误处理中间件
 const errorHandlerMiddleware = require("./middleware/error-handler");
+
+//加token
+const {expressjwt} = require('express-jwt')
+const config = require('./config')
+
 //同样没看懂，他是引用env文件的环境变量的，但是她并没有设置env文件，大胆猜测把这个代码删除依旧可以正常运行
 require("dotenv").config();
 
@@ -22,8 +27,10 @@ app.use(xss());
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+app.use(expressjwt({secret: config.jwtSecretKey,algorithms:['HS256']}).unless({path: [/^\/login|^\/register/]}))
 
-app.use("/", dashboar);
+app.use(dashboar);
+
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
@@ -33,7 +40,7 @@ const port = process.env.PORT || 4538;
 const start = async () => {
   try {
     // await connectDB(process.env.MONGO_URI);
-    await connectDB("mongodb://localhost:27017/DOUBLEC");
+    await connectDB("mongodb://127.0.0.1:27017/DOUBLEC");
     //看起来他是运行在 http://127.0.0.1:4538 上的,跑起来会提示，但是我还没跑
     app.listen(port, console.log(`server is listening on port ${port}...`));
   } catch (error) {
