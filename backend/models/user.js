@@ -54,6 +54,14 @@ const User = new mongoose.Schema({
             values : ['common','admin','vip'],
             message : "the category is wrong!"
         }
+    },
+    logintimes : {
+        type : Number,
+        default : 0
+    },
+
+    Logindate :{
+        type : String
     }
 
 })

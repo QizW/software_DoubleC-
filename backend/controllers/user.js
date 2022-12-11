@@ -17,10 +17,13 @@ const CheckUser = asyncWrapper(async (req, res, next) => {
   } else if (bcryotjs.compareSync(req.body.password, OldUser.password)) {
     //根本没做加密！数据库里存真实密码
     const tokenstr = Token.sign({email:req.body.email}, configue.jwtSecretKey, {expiresIn: configue.expiresIn})
+    const wherestr = {email: req.body.email}
+    const updatestr = {$set: {"logintimes" : OldUser.logintimes+1, "Logindate" : new Date().toLocaleString()}}
+    await user.updateOne(wherestr, updatestr)
     return res.status(200).json({
       //他用的是标准status代表含义 即http自身规则，我们用起来还是很麻烦
       name: OldUser.username,
-      token : 'Bearer '+tokenstr
+      token : 'Bearer '+tokenstr,
     });
   } else {
     //错误中间件
@@ -49,7 +52,16 @@ const CreateUser = asyncWrapper(async (req, res, next) => {
   }
 });
 
+
+const Getuserinfo = asyncWrapper(async (req, res, next) =>{
+  const OldUser = await user.findOne({ email: req.body.email });
+  return res.status(200).json({
+    userinfo : OldUser
+  });
+})
+
 module.exports = {
   CheckUser,
   CreateUser,
+  Getuserinfo
 };
