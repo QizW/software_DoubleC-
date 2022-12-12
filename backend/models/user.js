@@ -21,6 +21,47 @@ const User = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide password'],
         minlength: [6, 'Password should be more than 6 characters'],
+        validate : {
+            validator : v=>{
+                var al = 0
+                var num = 0
+                for(var j=0;j<9;j++)
+                {
+                    if(v.indexOf(j) !== -1)
+                    {
+                        num = 1
+                        break
+                    }
+                }
+                for(i in v)
+                {
+                    var ss = v.charCodeAt(i)
+                    if((ss >= 65 && ss <= 90) || (ss >= 97 && ss <= 122))
+                    {
+                        al = 1
+                        break
+                    }
+                }
+                return al && num
+        },
+        message : '密码需要包含字母和数字'
+    }
+    },
+    category : {
+        type: String,
+        default : 'common',
+        enum:{
+            values : ['common','admin','vip'],
+            message : "the category is wrong!"
+        }
+    },
+    logintimes : {
+        type : Number,
+        default : 0
+    },
+
+    Logindate :{
+        type : String
     }
 
 })

@@ -9,8 +9,9 @@ const {
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
+  
 } = require("../controllers/dash");
-const { CheckUser, CreateUser } = require("../controllers/user");
+const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
 
 router.route("/import").post(GetMessage);
 router.route("/login").post(CheckUser);
@@ -18,5 +19,9 @@ router.route("/register").post(CreateUser);
 router.route("/search").post(SearchRepoName);
 router.route("/dashboard").post(GetDashboard);
 router.route("/delete").post(DeleteRepo);
+
+//获取用户信息
+router.route("/getuser").post(Getuserinfo);
+
 
 module.exports = router;
