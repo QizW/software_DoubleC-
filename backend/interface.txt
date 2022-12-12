@@ -1,0 +1,60 @@
+/import 导入仓库 post
+{
+    "owner": "pytorch",
+    "repoName": "pytorch",
+    "user" : "wqz"
+}
+返回
+{
+    status: 成功返回"success!" 失败返回错误信息
+}
+
+
+/getuser 获取用户信息 post
+{
+    email
+}
+返回 ex:
+{
+    {
+    "userinfo": {
+        "_id": "63959f03920ec7907f49db77",
+        "username": "wqz",
+        "email": "2167957130@qq.com",
+        "password": "$2a$10$qlGoZmoUXy5NEmwOTlqJpO/DV2NA6.LNyaZN6WNturd3Qo4/Z7Aam",
+        "category": "common",
+        "logintimes": 7,
+        "__v": 0,
+        "Logindate": "2022/12/13 03:09:14"
+    }
+}
+}
+
+
+/login  登录 post
+{
+    email,
+    password
+}
+返回
+{
+    name,
+    token
+}
+
+/register 注册 post
+{
+    name
+    password
+    email
+}
+返回
+{
+    name
+}
+
+/search
+
+/dashboard
+
+/delete

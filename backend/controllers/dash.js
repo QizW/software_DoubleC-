@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -20,7 +20,7 @@ const GetMessage = async (req, res) => {
       owner: req.body.owner,
       repo: req.body.repoName,
     });
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nRepo Message:",repoMessage.data,"\n!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nRepo Message:",repoMessage.data,"\n!!!!!!!!!!!!!!!!!!!!!!");
     //这是在干嘛?看起来在插入数据库，应该是这样
     const CreateRepo = await RepoSchema.create({
       name: repoMessage.data.name,
