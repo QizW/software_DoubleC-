@@ -7,17 +7,20 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
+  auto_paginate: true
 });
+
 
 //
 const GetMessage = async (req, res) => {
   try {
     //调用github接获取信息
-    const repoMessage = await octokit.request("GET /repos/{owner}/{repo}", {
+    const repoMessage = await octokit.request("GET /repos/{owner}/{repo} -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"", {
       owner: req.body.owner,
       repo: req.body.repoName,
     });
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nRepo Message:",repoMessage.data,"\n!!!!!!!!!!!!!!!!!!!!!!");
     //这是在干嘛?看起来在插入数据库，应该是这样
     const CreateRepo = await RepoSchema.create({
       name: repoMessage.data.name,
@@ -37,6 +40,10 @@ const GetMessage = async (req, res) => {
       contributors: await RepoGetContributors(
         repoMessage.data.owner.login,
         repoMessage.data.name
+      ),
+      community: await RepoGetCommunity(
+          repoMessage.data.owner.login,
+          repoMessage.data.name
       ),
       timeline: {
         created_at: repoMessage.data.created_at,
@@ -61,9 +68,9 @@ const GetMessage = async (req, res) => {
 //搜索repo
 const SearchRepoName = async (req, res) => {
   try {
-    //不清楚这个req.body里面有啥，但是可以确定 RepoSchema是定义好的访问数据库的实体，调用的是nodejs mongodb库的函数 trim函数移除两侧空白字符 
+    //不清楚这个req.body里面有啥，但是可以确定 RepoSchema是定义好的访问数据库的实体，调用的是nodejs mongodb库的函数 trim函数移除两侧空白字符
     const SearchKey = req.body.search.trim();
-    if (SearchKey == "") {
+    if (SearchKey === "") {
       var search = await RepoSchema.find({});
     } else
       search = await RepoSchema.find({
@@ -109,7 +116,7 @@ const DeleteRepo = async (req, res) => {
 //获取提交的频率
 const RepoGetCommitFrequency = async (owner, name) => {
   const repoMessage = await octokit.request(
-    "GET /repos/{owner}/{repo}/commits",
+    "GET /repos/{owner}/{repo}/commits  -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
     {
       owner: owner,
       repo: name,
@@ -118,10 +125,10 @@ const RepoGetCommitFrequency = async (owner, name) => {
     }
   );
   //获取commits数，看起来这个接口一下只能获取一页的数据，用循环的方式去查看有没有下一页
-  if (repoMessage.data.length == 0) return { 2021: "0", 2020: "0", 2019: "0" };
+  if (repoMessage.data.length === 0) return { 2022: "0", 2021: "0", 2020: "0" };
   for (var i = 2; i <= 5; i++) {
     const NextRepoMessage = await octokit.request(
-      "GET /repos/{owner}/{repo}/commits",
+      "GET /repos/{owner}/{repo}/commits  -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
       {
         owner: owner,
         repo: name,
@@ -129,7 +136,7 @@ const RepoGetCommitFrequency = async (owner, name) => {
         page: i,
       }
     );
-    if (NextRepoMessage.data.length == 0) break;
+    if (NextRepoMessage.data.length === 0) break;
     else repoMessage.data = repoMessage.data.concat(NextRepoMessage.data);
   }
 //获取最早和最晚的提交时间
@@ -173,7 +180,7 @@ const CountDayCommit = (Msg) => {
   var pra = Math.floor((Object.keys(order).length - 1) / 6) + 1;
   var answer = {};
   var a = Math.floor(Object.keys(order).length / pra);
-  if (pra == 1) {
+  if (pra === 1) {
     for (var i = 0; i < a; i++) {
       answer[order[i.toString()]] = result[order[i.toString()]];
     }
@@ -193,7 +200,7 @@ const CountDayCommit = (Msg) => {
 //获取Issue频率
 const RepoGetIssueFrequency = async (owner, name) => {
   const repoMessage = await octokit.request(
-    "GET /repos/{owner}/{repo}/issues",
+    "GET /repos/{owner}/{repo}/issues  -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
     {
       owner: owner,
       repo: name,
@@ -202,10 +209,10 @@ const RepoGetIssueFrequency = async (owner, name) => {
     }
   );
     //和前面同理
-  if (repoMessage.data.length == 0) return { 2021: "0", 2020: "0", 2019: "0" };
+  if (repoMessage.data.length === 0) return { 2022: "0", 2021: "0", 2020: "0" };
   for (var i = 2; i <= 5; i++) {
     const NextRepoMessage = await octokit.request(
-      "GET /repos/{owner}/{repo}/issues",
+      "GET /repos/{owner}/{repo}/issues  -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
       {
         owner: owner,
         repo: name,
@@ -213,7 +220,7 @@ const RepoGetIssueFrequency = async (owner, name) => {
         page: i,
       }
     );
-    if (NextRepoMessage.data.length == 0) break;
+    if (NextRepoMessage.data.length === 0) break;
     else repoMessage.data = repoMessage.data.concat(NextRepoMessage.data);
   }
 
@@ -252,7 +259,7 @@ const CountDayIssue = (Msg) => {
   var pra = Math.floor((Object.keys(order).length - 1) / 6) + 1;
   var answer = {};
   var a = Math.floor(Object.keys(order).length / pra);
-  if (pra == 1) {
+  if (pra === 1) {
     for (var i = 0; i < a; i++) {
       answer[order[i.toString()]] = result[order[i.toString()]];
     }
@@ -344,13 +351,13 @@ const CountMonthIssue = (t1, t2, commitmsg) => {
 
 const RepoGetContributors = async (owner, name) => {
   const repoMessage = await octokit.request(
-    "GET /repos/{owner}/{repo}/contributors",
+    "GET /repos/{owner}/{repo}/contributors  -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
     {
       owner: owner,
       repo: name,
     }
   );
-
+  console.log("??????????????????????\n"+repoMessage.data+"\n????????????????????????????\n")
   var result = [];
   for (
     var i = 0;
@@ -397,6 +404,49 @@ const RepoGetLanguage = async (owner, name) => {
   );
   return repoMessage.data;
 };
+
+const RepoGetCommunity = async (owner, name) => {
+  const contributorMessage = await octokit.request(
+      "GET /repos/{owner}/{repo}/contributors -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
+      {
+        anon: true,
+        owner: owner,
+        repo: name,
+        per_page: 100,
+        page: 1
+      }
+  );
+  let count=2;
+  while (true){
+    const NextRepoMessage = await octokit.request(
+        "GET /repos/{owner}/{repo}/contributors -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
+        {
+            anon: true,
+            owner: owner,
+            repo: name,
+            per_page: 100,
+            page: count
+        }
+    );
+    if (NextRepoMessage.data.length === 0) break;
+    else contributorMessage.data = contributorMessage.data.concat(NextRepoMessage.data);
+    count++;
+  }
+  console.log("count",count)
+  const issueMessage = await octokit.request(
+      "GET /repos/{owner}/{repo}  -H \"If-Modified-Since: Mon, 12 Dec 2022 15:00:00 GMT\"",
+      {
+          anon: true,
+          owner: owner,
+          repo: name,
+      }
+  );
+  return {
+    contributor: contributorMessage.data.length,
+    issuer: issueMessage.data.open_issues_count
+  };
+};
+
 
 module.exports = {
   GetMessage,

@@ -40,6 +40,10 @@ const Repo = new mongoose.Schema({
         type:[Object],
         required: [true, 'must provide contributors'],
     },
+    community:{
+        type:Object,
+        required: [true, 'must provide community'],
+    },
     timeline:{
         type:Object
     },
