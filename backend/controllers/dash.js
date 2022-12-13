@@ -703,4 +703,7 @@ module.exports = {
   DeleteRepo,
   DataRangeChoose,
   GetCommunityDevelopment,
+  SigCompare,
+  ComCompare,
+  GetCertainIssue
 };
