@@ -25,13 +25,16 @@ import {
 } from "./actions";
 import axios from "axios";
 import reducer from "./reducer";
+import jwt_decode from "jwt-decode";
+//import config from "../../../backend/config";
 
 const user = localStorage.getItem("name");
+const email = localStorage.getItem("email");
 
 export const initialState = {
   isLoading: false,
   showAlert: false,
-  user: user ? JSON.parse(user) : null,
+  user: user==null ? JSON.parse(user) : null,//改了，否则前端会有json not defined 的报错
   alertText: "",
   alertType: "",
   showSidebar: false,
@@ -74,6 +77,7 @@ const AppProvider = ({ children }) => {
     });
   };
 
+  //注册函数
   const registerUser = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN });
     try {
@@ -83,7 +87,7 @@ const AppProvider = ({ children }) => {
         type: REGISTER_USER_SUCCESS,
         payload: { name },
       });
-
+      // 将用户名存入LocalStorage中
       addUserToLocalStorage({ name });
     } catch (error) {
       dispatch({
@@ -97,21 +101,50 @@ const AppProvider = ({ children }) => {
   const loginUser = async (currentUser) => {
     dispatch({ type: LOGIN_USER_BEGIN });
     try {
-      const { data } = await authFetch.post("/login", currentUser);
-      const { name } = data;
+      const  {data}   = await authFetch.post("/login", currentUser);
+      //data 目前为json格式，data.token可以获取token
+      // const { name } = data;
+      
+      // console.log({name})
+      // 解析token
+      // 解析后的json格式为{email: '928606715@qq.com', iat: 1670899874, exp: 1670935874}
+      // const decode = jwt_decode(data.token)
+      // console.log(decode)
 
+      // 获取邮箱
+      // const email = decode.email
+      // console.log(email)
+
+      let storage = window.localStorage
+      storage.token = data.token
+      const decode = jwt_decode(localStorage.token)
+      storage.name = data.name
+      storage.email = decode.email
+      axios.interceptors.request.use(function(config){
+        config.withCredentials = true
+        config.headers = {
+          Authorization : storage.token
+        }
+        return config
+      },function(error){
+        return Promise.reject(error)
+      })
+      
+      const name = storage.name
+      const email = storage.email
       dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: { name },
       });
-
       addUserToLocalStorage({ name });
+      addEMailToLocalStorage({ email });
+
     } catch (error) {
-      // console.log(error.response)
-      dispatch({
-        type: LOGIN_USER_ERROR,
-        payload: { msg: error.response.data.msg },
-      });
+       console.log(error.response)
+      // dispatch({
+      //   type: LOGIN_USER_ERROR,
+      //   payload: { msg: error.response.data.msg },
+      // });
     }
     clearAlert();
   };
@@ -123,9 +156,21 @@ const AppProvider = ({ children }) => {
   const removeUserFromLocalStorage = () => {
     localStorage.removeItem("name");
   };
+
+  // email存入local storage
+  const addEMailToLocalStorage = ({ email }) => {
+    localStorage.setItem("email",JSON.stringify(email));
+  };
+
+  const removeEMailFromLocalStorage = () => {
+    localStorage.removeItem("email");
+  };
+
   const logoutUser = () => {
     dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
+    // 移除邮箱
+    removeEMailFromLocalStorage();
   };
 
   const importRepo = async (repoInfo) => {

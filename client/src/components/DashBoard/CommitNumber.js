@@ -27,15 +27,24 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
   )} 0%, ${alpha(theme.palette.error.dark, 0.24)} 100%)`,
 }));
 
-const TOTAL = 234;
+// 目前设定的commit值为定值
 
-export default function CommitNumber() {
+
+export default function CommitNumber(data) {
+  //计算commit总数
+  var total = 0;
+
+  for(var commit in data){
+    total+=data[commit]
+  }
+  console.log(data)
+
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon="bx:bx-git-commit" width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(total)}</Typography>
       <Typography variant="subtitle2">Commits</Typography>
     </RootStyle>
   );

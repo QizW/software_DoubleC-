@@ -32,6 +32,7 @@ const Repo = ({ _id, owner, name, uploader, stars, uploaded_time }) => {
         <footer>
           <div className="actions">
             <Link to={`/analyze/${_id}`} className="btn edit-btn">
+              {/* 点击view按钮跳转到DashBoard.js */}
               View
             </Link>
           </div>

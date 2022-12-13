@@ -54,6 +54,7 @@ const AllRepos = () => {
   return (
     <Wrapper>
       <h5>
+        {/* 如果有导入的仓库，则输出仓库列表 */}
         {repos.length} repo{repos.length > 1 && "s"} found in{" "}
         {viewMyRepos ? "your" : "all"} repo
       </h5>
