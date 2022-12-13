@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -66,6 +66,7 @@ const GetMessage = async (req, res) => {
     console.log("11111111111111111111111")
     res.status(201).json({ status: "success!" });
   } catch (err) {
+    console.log("error:",err);
     res.status(404).json(err);
   }
 };
@@ -222,7 +223,6 @@ const CountDayIssue = (Msg) => {
       result[t] = 1;
     } else {
       result[t] += 1;
-      committer[t][Msg.data.actor.login]+=1;
     }
   }
   console.log(committer);
