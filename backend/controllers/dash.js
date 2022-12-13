@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -481,14 +481,187 @@ const DataRangeChoose = async(req,res)=>{
 
     if(info.sort === 0)
     {
-      res =  Object.keys(answer).sort();
+      var ress =  Object.keys(answer).sort();
       var answer1 = {}
-      for(var i in res)
+      for(var i in ress)
       {
-        answer1[res[i]] = answer[res[i]]
+        answer1[ress[i]] = answer[ress[i]]
       }
       answer = answer1
     }
+    else if(info.sort === 1)
+    {
+      var ress =  Object.keys(answer).sort();
+      var answer1 = {}
+      for(var i=ress.length-1; i>=0; i--)
+      {
+        answer1[ress[i]] = answer[ress[i]]
+      }
+      answer = answer1
+    }
+    res.status(201).json(answer)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
+
+const SigCompare = async(req, res)=>{
+  try{
+    var answer = []
+    const info = req.body
+    const repo = await RepoSchema.find({_id : info.id})
+    console.log(repo)
+    if(info.kind === 'commit_frequency')
+    {
+      for(var j=0; j < info.begin.length; j++)
+      {
+        answer.push({})
+        for(var i in repo[0].commit_frequency)
+        {
+          if(i >= info.begin[j] && i <= info.end[j])
+          {
+            answer[j][i] = repo[0].commit_frequency[i]
+          }
+        }
+      }
+    }
+    else if(info.kind === 'issue_frequency')
+    {
+      for(var j=0; j < info.begin.length; j++)
+      {
+        answer.push({})
+        for(var i in repo[0].issue_frequency)
+        {
+          if(i >= info.begin[j] && i <= info.end[j])
+          {
+            answer[j][i] = repo[0].issue_frequency[i]
+          }
+        }
+      }
+    }
+    else if(info.kind === 'contributors')
+    {
+      answer = repo[0].contributors
+    }
+    console.log(answer)
+
+    if(info.sort === 0 && info.kind !== 'contributors')
+    {
+      for(var k=0; k<answer.length; k++)
+      {
+        console.log(answer.length)
+        var resu =  Object.keys(answer[k]).sort();
+        var answer1 = {}
+        for(var i in resu)
+        {
+          answer1[resu[i]] = answer[k][resu[i]]
+        }
+        answer[k] = answer1
+      }
+    }
+    else if(info.sort === 1 && info.kind !== 'contributors')
+    {
+      for(var k=0; k<answer.length; k++)
+      {
+        var resu =  Object.keys(answer[k]).sort();
+        var answer1 = {}
+        for(var i=resu.length; i>=0; i--)
+        {
+          answer1[resu[i]] = answer[k][resu[i]]
+        }
+        answer[k] = answer1
+      }
+    }
+
+    res.status(201).json(answer)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
+
+const ComCompare = async(req, res)=>{
+  try{
+    var answer = []
+    const info = req.body
+    var repo = []
+    for(var i=0; i<info.id.length; i++)
+    {
+      var repo1 = await RepoSchema.find({_id : info.id[i]})
+      repo.push(...repo1)
+    }
+    if(info.kind === 'commit_frequency')
+    {
+      for(var i=0; i<repo.length; i++)
+      {
+        answer.push({})
+        for(var j in repo[i].commit_frequency)
+        {
+          if(j >= info.begin && j <= info.end)
+          {
+            answer[i][j] = repo[i].commit_frequency[j]
+          }
+        }
+      }
+    }
+    else if(info.kind === 'issue_frequency')
+    {
+      for(var i=0; i<repo.length; i++)
+      {
+        answer.push({})
+        for(var j in repo[i].issue_frequency)
+        {
+          if(j >= info.begin && j <= info.end)
+          {
+            answer[i][j] = repo[i].issue_frequency[j]
+          }
+        }
+      }
+    }
+    else if(info.kind === 'others')
+    {
+      for(var i=0; i<repo.length; i++)
+      {
+        answer.push({})
+        answer[i]['forks'] = repo[i].forks
+        answer[i]['stars'] = repo[i].stars
+        answer[i]['open_issues'] = repo[i].open_issues
+        answer[i]['community_contributor '] = repo[i].community.contributor 
+        answer[i]['community_issuer'] = repo[i].community.issuer 
+      }
+    }
+
+    if(info.sort === 0 && info.kind !== 'others')
+    {
+      for(var k=0; k<answer.length; k++)
+      {
+        var resu =  Object.keys(answer[k]).sort();
+        var answer1 = {}
+        for(var i in resu)
+        {
+          answer1[resu[i]] = answer[k][resu[i]]
+        }
+        answer[k] = answer1
+      }
+    }
+    else if(info.sort === 1 && info.kind !== 'others')
+    {
+      for(var k=0; k<answer.length; k++)
+      {
+        var resu =  Object.keys(answer[k]).sort();
+        var answer1 = {}
+        console.log(resu)
+        for(var i=resu.length-1; i>=0; i--)
+        {
+          answer1[resu[i]] = answer[k][resu[i]]
+        }
+        answer[k] = answer1
+      }
+    }
+
     res.status(201).json(answer)
   }
   catch(err)
@@ -503,5 +676,7 @@ module.exports = {
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
-  DataRangeChoose
+  DataRangeChoose,
+  SigCompare,
+  ComCompare
 };

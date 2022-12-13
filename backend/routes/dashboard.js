@@ -9,7 +9,9 @@ const {
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
-  DataRangeChoose
+  DataRangeChoose,
+  SigCompare,
+  ComCompare
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
 
@@ -20,6 +22,11 @@ router.route("/search").post(SearchRepoName);
 router.route("/dashboard").post(GetDashboard);
 router.route("/delete").post(DeleteRepo);
 router.route("/DataRangeChoose").post(DataRangeChoose)
+router.route("/SigCompare").post(SigCompare)
+router.route("/ComCompare").post(ComCompare)
+
+
+
 
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);
