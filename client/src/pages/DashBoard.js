@@ -16,6 +16,7 @@ import {
   IssueFrequency,
   ContributorList,
 } from "../components/DashBoard";
+import DevelopingSpeed from "../components/DashBoard/DevelopingSpeed";
 
 export default function DashboardApp() {
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function DashboardApp() {
     const contribute = {
       name: [],
       contributions: [],
+      followers: [],
     };
 
     if (contributors) {
@@ -49,6 +51,7 @@ export default function DashboardApp() {
       for (var i = 0; i < Math.min(5, contributors.length); ++i) {
         contribute.name.push(contributors[i].name);
         contribute.contributions.push(contributors[i].contributions);
+        contribute.followers.push(contributors[i].followers)
       }
     }
 
@@ -85,6 +88,9 @@ export default function DashboardApp() {
             </Grid>
             <Grid item xs={12} sm={6} md={12}>
               <Contribute {...contribute} />
+            </Grid>
+            <Grid item xs={12} sm={6} md={12}>
+              <DevelopingSpeed data1={commit_frequency} data2={issue_frequency} />
             </Grid>
             {contributors && (
               <Grid item xs={12} sm={6} md={12}>

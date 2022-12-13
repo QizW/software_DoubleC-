@@ -27,6 +27,7 @@ app.use(xss());
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+// app.use(expressjwt({secret: config.jwtSecretKey,algorithms:['HS256']}).unless({path: [/^\/login|^\/register/]}))
 //app.use(expressjwt({secret: config.jwtSecretKey,algorithms:['HS256']}).unless({path: [/^\/login|^\/register/]}))
 
 app.use(dashboar);

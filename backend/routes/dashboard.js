@@ -10,6 +10,7 @@ const {
   GetDashboard,
   DeleteRepo,
   DataRangeChoose,
+  GetCommunityDevelopment,
   SigCompare,
   ComCompare
 } = require("../controllers/dash");
@@ -24,7 +25,7 @@ router.route("/delete").post(DeleteRepo);
 router.route("/DataRangeChoose").post(DataRangeChoose)
 router.route("/SigCompare").post(SigCompare)
 router.route("/ComCompare").post(ComCompare)
-
+router.route("/GetCommunityDevelopment").post(GetCommunityDevelopment)
 
 
 
