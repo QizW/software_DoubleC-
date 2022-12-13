@@ -44,6 +44,9 @@ const Repo = new mongoose.Schema({
         type:Object,
         required: [true, 'must provide community'],
     },
+    issue:{
+        type:[Object]
+    },
     timeline:{
         type:Object
     },
