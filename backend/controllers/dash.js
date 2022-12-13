@@ -311,7 +311,7 @@ const RepoGetCommunity = async (owner, name) => {
     else contributorMessage.data = contributorMessage.data.concat(NextRepoMessage.data);
     count++;
   }
-  console.log("count",count)
+  //console.log("count",count)
   const issueMessage = await octokit.request(
       "GET /repos/{owner}/{repo}  ",
       {
@@ -325,7 +325,41 @@ const RepoGetCommunity = async (owner, name) => {
     issuer: issueMessage.data.open_issues_count
   };
 };
-
+const GetCommunityDevelopment = async(req,res)=>{
+  //console.log('GetCommunityDevelopment');
+  try{
+    // console.log(req.body)
+    var result = {}
+    const info = req.body
+    //console.log(req.body)
+    const repo = await RepoSchema.find({_id : info.id})
+    const commit = repo[0].commit_frequency;
+    const issue = repo[0].issue_frequency;
+    for(var i in issue){
+      console.log(result[i]);
+      if(i >= info.begin && i <= info.end){
+        if(result[i]===undefined){
+          result[i] = 0;
+        }
+        result[i] += issue[i];
+      }
+    }
+    for(var i in commit){
+      if(i >= info.begin && i <= info.end){
+        console.log('compare')
+        if(result[i]===undefined){
+          result[i] = 0;
+        }
+        result[i] += commit[i];
+      }
+    }
+    res.status(201).json(result)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
 const RepoGetIssue = async (owner, name) => {
   const issueMessage = await octokit.request(
       "GET /repos/{owner}/{repo}/issues ",
@@ -425,5 +459,6 @@ module.exports = {
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
-  DataRangeChoose
+  DataRangeChoose,
+  GetCommunityDevelopment,
 };
