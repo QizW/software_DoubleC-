@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -20,7 +20,6 @@ const GetMessage = async (req, res) => {
       owner: req.body.owner,
       repo: req.body.repoName,
     });
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nRepo Message:",repoMessage.data,"\n!!!!!!!!!!!!!!!!!!!!!!");
     //这是在干嘛?看起来在插入数据库，应该是这样
     const CreateRepo = await RepoSchema.create({
       name: repoMessage.data.name,
@@ -63,9 +62,9 @@ const GetMessage = async (req, res) => {
         repoMessage.data.name
       ),
     });
-    console.log("11111111111111111111111")
     res.status(201).json({ status: "success!" });
   } catch (err) {
+    console.log("error:",err);
     res.status(404).json(err);
   }
 };
@@ -161,20 +160,37 @@ const RepoGetCommitFrequency = async (owner, name) => {
 const CountDayCommit = (Msg) => {
   var order = {};
   var result = {};
-
+  committer = new Map;
   for (var i in Msg.data) {
     var t = Msg.data[i].commit.committer.date.substring(0, 10);
-    //又是库
     formalLength = Object.keys(order).length;
-    //统计时间
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
+      temp=new Map;
+      temp.set(Msg.data[i].commit.author.name,1);
+      committer.set(t,temp);
     } else {
       result[t] += 1;
+      temp=committer.get(t);
+      if (temp.has(Msg.data[i].commit.author.name)){
+        temp.set(Msg.data[i].commit.author.name,temp.get(Msg.data[i].commit.author.name)+1);
+      }
+      else{
+        temp.set(Msg.data[i].commit.author.name,1);
+      }
+      committer.set(t,temp);
     }
   }
-  return result;
+  var total=[];
+  for (const resultKey in result) {
+    var oneday={};
+    oneday.date=resultKey;
+    oneday.sum=result[resultKey];
+    oneday.committer=committer.get(resultKey);
+    total.push(oneday);
+  }
+  return total;
 };
 
 //获取Issue频率
@@ -213,20 +229,37 @@ const RepoGetIssueFrequency = async (owner, name) => {
 const CountDayIssue = (Msg) => {
   var order = {};
   var result = {};
-  var committer = {};
+  issuer = new Map;
   for (var i in Msg.data) {
     var t = Msg.data[i].created_at.substring(0, 10);
     formalLength = Object.keys(order).length;
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
+      temp=new Map;
+      temp.set(Msg.data[i].user.login,1);
+      issuer.set(t,temp);
     } else {
       result[t] += 1;
-      committer[t][Msg.data.actor.login]+=1;
+      temp=issuer.get(t);
+      if (temp.has(Msg.data[i].user.login)){
+        temp.set(Msg.data[i].user.login,temp.get(Msg.data[i].user.login)+1);
+      }
+      else{
+        temp.set(Msg.data[i].user.login,1);
+      }
+      issuer.set(t,temp);
     }
   }
-  console.log(committer);
-  return result;
+  var total=[];
+  for (const resultKey in result) {
+    var oneday={};
+    oneday.date=resultKey;
+    oneday.sum=result[resultKey];
+    oneday.issuer=issuer.get(resultKey);
+    total.push(oneday);
+  }
+  return total;
 };
 
 const RepoGetContributors = async (owner, name) => {
@@ -237,7 +270,6 @@ const RepoGetContributors = async (owner, name) => {
       repo: name,
     }
   );
-  console.log("??????????????????????\n"+repoMessage.data+"\n????????????????????????????\n")
   var result = [];
   for (
     var i = 0;
@@ -408,6 +440,7 @@ const RepoGetIssue = async (owner, name) => {
 
   return result;
 };
+
 
 const DataRangeChoose = async(req,res)=>{
   try{
@@ -627,6 +660,41 @@ const ComCompare = async(req, res)=>{
   }
 }
 
+const GetCertainIssue = async(req,res)=>{
+  // const issues = [
+  // {"title": "Importing torch causes segfault when using python installed with conda", 
+  // "body": "### \uD83D\uDC1B Describe the bug\n\nCross-posted to: https://discuss.pytorch.org/t/importing-torch-causes-segfault-when-using-python-installed-with-conda/168212\r\n\r\nI create a conda environment with: `conda create -y -n dev python=3.7`.\r\nIn install torch with:\r\n```\r\nconda run -n dev pip install torch==1.14.0.dev20221027+cu116 --pre --extra-index-url https://download.pytorch.org/whl/nightly/cu116\r\n```\r\n\r\nrunning: `python3 -c import torch` gives a segfault.\r\nHere's the gdb backtrace:\r\n\r\n```\r\n-c (gdb) r -c 'import torch'\r\nStarting program: /opt/conda/envs/dev/bin/python3 -c 'import torch'\r\n[Thread debugging using libthread_db enabled]\r\nUsing host libthread_db library \"/lib/x86_64-linux-gnu/libthread_db.so.1\".\r\n[Detaching after fork from child process 31265]\r\n\r\nProgram received signal SIGSEGV, Segmentation fault.\r\n0x000055555564d27c in type_name (context=<optimized out>, type=0x555558aa7630)\r\n    at /home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c:433\r\n433\t/home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c: No such file or directory.\r\n```\n\n### Versions\n\nThe script segfaults.", 
+  // "created_at": "2022-12-13T06:10:38Z"}, 
+  // {"title": "[ao] adding section to help users decide which quantization to use", 
+  // "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90748\n\nSummary: adding a section to the docs that help users understand when to\nuse the many quantization tools\n\nTest Plan: just docs\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:",
+  // "created_at": "2022-12-13T04:21:51Z"}, 
+  // {"title": "temp", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #90748\n* __->__ #90747\n\nSummary:\n\nTest Plan:\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:", "created_at": "2022-12-13T04:21:46Z"}, 
+  // {"title": "Revert \"[reland][dynamo] use optimizers correctly in benchmarking (#87492)\"", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90746\n\nThis reverts commit d91d7a322172da4d92672301f3cfa3344d544a9e.\n\ncc @mlazos @soumith @voznesenskym @yanboliang @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx", "created_at": "2022-12-13T03:43:04Z"}, {"title": "Fix FSDP checkpoint tests", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90745\n* #90621\n* #90620\n* #90579\n* #90523\n\n", "created_at": "2022-12-13T03:18:44Z"}, {"title": "feature: adding the ability to restore shapes after loading a traced model", "body": "Adds the ability to store inputs used in tracing models when calling torch.jit.save and restore the input shapes using torch.jit.load if the appropriate variables are set.\r\n\r\nFixes [89185](https://github.com/pytorch/pytorch/issues/89185)\r\n", "created_at": "2022-12-13T02:31:34Z"}, {"title": "[inductor] Pattern match cat->view*->pointwise and hoist pointwise", "body": "Summary:\nInductor can't fuse pointwise into the output of concat, but it can\nfuse into the inputs, and that's the same thing.  So we hoist pointwise through\na concat (followed by an optional series of views).\n\nTest Plan: New unit test\n\nDifferential Revision: D41901656\n\n\n\ncc @mlazos @soumith @voznesenskym @yanboliang @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx @peterbell10 @desertfire", "created_at": "2022-12-13T01:58:23Z"}, {"title": "Adopt full_backward_pre_hook in DDP", "body": "### \uD83D\uDE80 The feature, motivation and pitch\n\nSince https://github.com/pytorch/pytorch/pull/86700 has landed supporting the full backward pre hook, we should enable this with DDP for a true module level pre-backward hook and eliminate things such as _DDPSink.\n\n### Alternatives\n\n_No response_\n\n### Additional context\n\n_No response_\n\ncc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu", "created_at": "2022-12-13T01:54:01Z"}];
+  try{
+    var result = {}
+    const info = req.body
+    for ( var i = 0; i <issues.length; i++){
+      if(issues[i].title.toString().search(info.keyword) != -1){
+        //console.log('find');
+        var t = issues[i].created_at.substring(0, 10);
+        //console.log(t)
+        if(t >= info.begin && t <= info.end){
+          if(result[t]===undefined){
+            result[t] = 1;
+          }
+          else{
+            result[t] += 1;
+          }
+        }
+      }
+    }
+    res.status(201).json(result)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
 
 module.exports = {
   GetMessage,
@@ -634,7 +702,5 @@ module.exports = {
   GetDashboard,
   DeleteRepo,
   DataRangeChoose,
-  SigCompare,
-  ComCompare,
-  GetCommunityDevelopment
+  GetCommunityDevelopment,
 };
