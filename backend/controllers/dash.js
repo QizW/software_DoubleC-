@@ -162,20 +162,37 @@ const RepoGetCommitFrequency = async (owner, name) => {
 const CountDayCommit = (Msg) => {
   var order = {};
   var result = {};
-
+  committer = new Map;
   for (var i in Msg.data) {
     var t = Msg.data[i].commit.committer.date.substring(0, 10);
-    //又是库
     formalLength = Object.keys(order).length;
-    //统计时间
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
+      temp=new Map;
+      temp.set(Msg.data[i].commit.author.name,1);
+      committer.set(t,temp);
     } else {
       result[t] += 1;
+      temp=committer.get(t);
+      if (temp.has(Msg.data[i].commit.author.name)){
+        temp.set(Msg.data[i].commit.author.name,temp.get(Msg.data[i].commit.author.name)+1);
+      }
+      else{
+        temp.set(Msg.data[i].commit.author.name,1);
+      }
+      committer.set(t,temp);
     }
   }
-  return result;
+  var total=[];
+  for (const resultKey in result) {
+    var oneday={};
+    oneday.date=resultKey;
+    oneday.sum=result[resultKey];
+    oneday.committer=committer.get(resultKey);
+    total.push(oneday);
+  }
+  return total;
 };
 
 //获取Issue频率
@@ -214,19 +231,37 @@ const RepoGetIssueFrequency = async (owner, name) => {
 const CountDayIssue = (Msg) => {
   var order = {};
   var result = {};
-  var committer = {};
+  issuer = new Map;
   for (var i in Msg.data) {
     var t = Msg.data[i].created_at.substring(0, 10);
     formalLength = Object.keys(order).length;
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
+      temp=new Map;
+      temp.set(Msg.data[i].user.login,1);
+      issuer.set(t,temp);
     } else {
       result[t] += 1;
+      temp=issuer.get(t);
+      if (temp.has(Msg.data[i].user.login)){
+        temp.set(Msg.data[i].user.login,temp.get(Msg.data[i].user.login)+1);
+      }
+      else{
+        temp.set(Msg.data[i].user.login,1);
+      }
+      issuer.set(t,temp);
     }
   }
-  console.log(committer);
-  return result;
+  var total=[];
+  for (const resultKey in result) {
+    var oneday={};
+    oneday.date=resultKey;
+    oneday.sum=result[resultKey];
+    oneday.issuer=issuer.get(resultKey);
+    total.push(oneday);
+  }
+  return total;
 };
 
 const RepoGetContributors = async (owner, name) => {
@@ -407,6 +442,7 @@ const RepoGetIssue = async (owner, name) => {
 
   return result;
 };
+
 
 const DataRangeChoose = async(req,res)=>{
   try{
