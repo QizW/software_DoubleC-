@@ -73,9 +73,13 @@ const SearchRepoName = async (req, res) => {
     if (SearchKey === "") {
       var search = await RepoSchema.find({});
     } else
+    {
       search = await RepoSchema.find({
-        name: { $regex: SearchKey, $options: "$i" },
+        name : { $regex : SearchKey, $options: 'i'}
       });
+    }
+    //{ '$regex': SearchKey, $options: "$i" }
+      // console.log(search)
     var repos = [];
     for (var i in search) {
       var eachRepo = {
@@ -88,9 +92,10 @@ const SearchRepoName = async (req, res) => {
       };
       repos.push(eachRepo);
     }
-    console.log(repos);
+    // console.log(repos,"?");
     return res.status(201).json({ repos });
   } catch (err) {
+    // console.log("!!!")
     res.status(404).json(err);
   }
 };

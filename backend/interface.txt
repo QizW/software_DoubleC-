@@ -53,8 +53,156 @@
     name
 }
 
-/search
+/search 搜索 post\
+{
+    search 模糊搜索仓库名字
+}
+返回
+{
+    {
+    "repos": [
+        {
+            "_id": "63978051cae6475ff5e634db",
+            "name": "pytorch",
+            "owner": "pytorch",
+            "stars": 60927,
+            "uploader": "wqz",
+            "uploaded_time": "2022-12-12T19:26:09.000Z"
+        }
+    ]
+}   repos是一个列表，存所有符合规定的仓库
+}
 
-/dashboard
 
-/delete
+
+
+/dashboard 搜索详细的仓库 post
+{
+    id 仓库的id,可以通过搜索名字得到
+}
+返回
+{
+    
+    "detail": {
+        "_id": "63978051cae6475ff5e634db",
+        "name": "pytorch",
+        "owner": "pytorch",
+        "uploader": "wqz",
+        "forks": 16975,
+        "stars": 60927,
+        "open_issues": 10782,
+        "commit_frequency": {
+            "2022-12-12": 60,
+            "2022-12-09": 142,
+            "2022-12-06": 98,
+            "2022-12-03": 104
+        },
+        "issue_frequency": {
+            "2022-12-12": 134,
+            "2022-12-08": 180,
+            "2022-12-04": 59,
+            "2022-11-30": 86,
+            "2022-11-26": 41
+        },
+        "contributors": [
+            {
+                "name": "ezyang",
+                "avatar_url": "https://avatars.githubusercontent.com/u/13564?v=4",
+                "contributions": 2097,
+                "company": null,
+                "public_repos": 184,
+                "public_gists": 66,
+                "followers": 1789,
+                "created_at": "2008-06-13T04:11:18Z"
+            },
+            {
+                "name": "malfet",
+                "avatar_url": "https://avatars.githubusercontent.com/u/2453524?v=4",
+                "contributions": 1278,
+                "company": null,
+                "public_repos": 38,
+                "public_gists": 31,
+                "followers": 82,
+                "created_at": "2012-09-29T17:47:22Z"
+            },
+            {
+                "name": "zou3519",
+                "avatar_url": "https://avatars.githubusercontent.com/u/5652049?v=4",
+                "contributions": 1240,
+                "company": null,
+                "public_repos": 47,
+                "public_gists": 21,
+                "followers": 182,
+                "created_at": "2013-10-10T01:51:13Z"
+            },
+            {
+                "name": "soumith",
+                "avatar_url": "https://avatars.githubusercontent.com/u/1310570?v=4",
+                "contributions": 1149,
+                "company": "Facebook AI Research",
+                "public_repos": 166,
+                "public_gists": 77,
+                "followers": 11217,
+                "created_at": "2012-01-06T23:20:12Z"
+            },
+            {
+                "name": "gchanan",
+                "avatar_url": "https://avatars.githubusercontent.com/u/3768583?v=4",
+                "contributions": 1084,
+                "company": null,
+                "public_repos": 22,
+                "public_gists": 40,
+                "followers": 256,
+                "created_at": "2013-03-04T20:09:56Z"
+            }
+        ],
+        "community": {
+            "contributor": 3745,
+            "issuer": 10782
+        },
+        "timeline": {
+            "created_at": "2016-08-13T05:26:41Z",
+            "updated_at": "2022-12-12T18:29:58Z",
+            "pushed_at": "2022-12-12T19:25:10Z",
+            "recent_released_at": "2022-10-28T16:54:00Z"
+        },
+        "language": {
+            "C++": 49428944,
+            "Python": 41621932,
+            "Cuda": 4143842,
+            "C": 2323427,
+            "Objective-C++": 1255709,
+            "CMake": 851577,
+            "Starlark": 374404,
+            "Assembly": 336348,
+            "Shell": 315106,
+            "Jupyter Notebook": 180959,
+            "Java": 132249,
+            "GLSL": 120892,
+            "PureBasic": 115115,
+            "Metal": 42755,
+            "JavaScript": 30559,
+            "Batchfile": 24330,
+            "Dockerfile": 23337,
+            "Objective-C": 21798,
+            "Jinja": 14139,
+            "Ruby": 10645,
+            "HTML": 5893,
+            "Makefile": 5688,
+            "PowerShell": 5075,
+            "Yacc": 3848,
+            "CSS": 2409,
+            "LLVM": 1605,
+            "GDB": 653,
+            "Vim Script": 154
+        },
+        "__v": 0
+    }
+}
+
+/delete 根据id删除仓库 post
+{
+    id 仓库的id,可以通过搜索名字得到
+}
+返回
+{ msg: "success!" }或错误信息
