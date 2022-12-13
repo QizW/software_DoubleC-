@@ -9,7 +9,7 @@ const {
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
-  
+  DataRangeChoose
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
 
@@ -19,6 +19,7 @@ router.route("/register").post(CreateUser);
 router.route("/search").post(SearchRepoName);
 router.route("/dashboard").post(GetDashboard);
 router.route("/delete").post(DeleteRepo);
+router.route("/DataRangeChoose").post(DataRangeChoose)
 
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);

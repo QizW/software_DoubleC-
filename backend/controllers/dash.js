@@ -452,10 +452,56 @@ const RepoGetCommunity = async (owner, name) => {
   };
 };
 
+const DataRangeChoose = async(req,res)=>{
+  try{
+    // console.log(req.body)
+    var answer = {}
+    const info = req.body
+    const repo = await RepoSchema.find({_id : info.id})
+    if(info.kind === 'commit_frequency')
+    {
+      for(var i in repo[0].commit_frequency)
+      {
+        if(i >= info.begin && i <= info.end)
+        {
+          answer[i] = repo[0].commit_frequency[i]
+        }
+      }
+    }
+    else if(info.kind === 'issue_frequency')
+    {
+      for(var i in repo[0].issue_frequency)
+      {
+        if(i >= info.begin && i <= info.end)
+        {
+          answer[i] = repo[0].issue_frequency[i]
+        }
+      }
+    }
+
+    if(info.sort === 0)
+    {
+      res =  Object.keys(answer).sort();
+      var answer1 = {}
+      for(var i in res)
+      {
+        answer1[res[i]] = answer[res[i]]
+      }
+      answer = answer1
+    }
+    res.status(201).json(answer)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
+
 
 module.exports = {
   GetMessage,
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
+  DataRangeChoose
 };
