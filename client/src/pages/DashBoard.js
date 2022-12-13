@@ -1,3 +1,4 @@
+// 点击对应仓库的view按钮后所展示的页面
 import { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import Loading from "../components/Loading";
@@ -33,6 +34,8 @@ export default function DashboardApp() {
     contributors,
   } = detail;
 
+  const totalCommitNumber = 0;
+  console.log(detail)
   if (isLoading) {
     return <Loading center />;
   } else {
@@ -42,6 +45,7 @@ export default function DashboardApp() {
     };
 
     if (contributors) {
+      // 原本限制了最多显示5个贡献者
       for (var i = 0; i < Math.min(5, contributors.length); ++i) {
         contribute.name.push(contributors[i].name);
         contribute.contributions.push(contributors[i].contributions);
@@ -56,7 +60,7 @@ export default function DashboardApp() {
         <Box>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <CommitNumber />
+              <CommitNumber {...commit_frequency}/>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <IssueNumber total={open_issues} />
@@ -67,7 +71,6 @@ export default function DashboardApp() {
             <Grid item xs={12} sm={6} md={3}>
               <ForkNumber total={forks} />
             </Grid>
-
             <Grid item xs={12} sm={6} md={4}>
               <TimeLine {...timeline} />
             </Grid>
