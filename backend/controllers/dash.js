@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -237,6 +237,7 @@ const RepoGetContributors = async (owner, name) => {
       repo: name,
     }
   );
+  console.log("??????????????????????\n"+repoMessage.data+"\n????????????????????????????\n")
   var result = [];
   for (
     var i = 0;
@@ -311,7 +312,7 @@ const RepoGetCommunity = async (owner, name) => {
     else contributorMessage.data = contributorMessage.data.concat(NextRepoMessage.data);
     count++;
   }
-  console.log("count",count)
+  //console.log("count",count)
   const issueMessage = await octokit.request(
       "GET /repos/{owner}/{repo}  ",
       {
@@ -325,7 +326,41 @@ const RepoGetCommunity = async (owner, name) => {
     issuer: issueMessage.data.open_issues_count
   };
 };
-
+const GetCommunityDevelopment = async(req,res)=>{
+  //console.log('GetCommunityDevelopment');
+  try{
+    // console.log(req.body)
+    var result = {}
+    const info = req.body
+    //console.log(req.body)
+    const repo = await RepoSchema.find({_id : info.id})
+    const commit = repo[0].commit_frequency;
+    const issue = repo[0].issue_frequency;
+    for(var i in issue){
+      console.log(result[i]);
+      if(i >= info.begin && i <= info.end){
+        if(result[i]===undefined){
+          result[i] = 0;
+        }
+        result[i] += issue[i];
+      }
+    }
+    for(var i in commit){
+      if(i >= info.begin && i <= info.end){
+        console.log('compare')
+        if(result[i]===undefined){
+          result[i] = 0;
+        }
+        result[i] += commit[i];
+      }
+    }
+    res.status(201).json(result)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
 const RepoGetIssue = async (owner, name) => {
   const issueMessage = await octokit.request(
       "GET /repos/{owner}/{repo}/issues ",
@@ -425,5 +460,6 @@ module.exports = {
   SearchRepoName,
   GetDashboard,
   DeleteRepo,
-  DataRangeChoose
+  DataRangeChoose,
+  GetCommunityDevelopment,
 };
