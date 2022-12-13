@@ -10,7 +10,8 @@ const {
   GetDashboard,
   DeleteRepo,
   GetCommunityDevelopment,
-  DataRangeChoose
+  DataRangeChoose,
+  GetCertainIssue
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
 
@@ -22,6 +23,7 @@ router.route("/dashboard").post(GetDashboard);
 router.route("/delete").post(DeleteRepo);
 router.route("/DataRangeChoose").post(DataRangeChoose)
 router.route("/GetCommunityDevelopment").post(GetCommunityDevelopment)
+router.route("/GetCertainIssue").post(GetCertainIssue)
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);
 
