@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 

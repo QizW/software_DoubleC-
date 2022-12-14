@@ -119,34 +119,37 @@ const AppProvider = ({ children }) => {
       storage.token = data.token
       const decode = jwt_decode(localStorage.token)
       storage.name = data.name
-      storage.email = decode.email
-      axios.interceptors.request.use(function(config){
-        config.withCredentials = true
-        config.headers = {
-          Authorization : storage.token
-        }
-        return config
-      },function(error){
-        return Promise.reject(error)
-      })
-      
+      storage.email = decode.email      
       const name = storage.name
-      const email = storage.email
+      // const email = storage.email
       dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: { name },
       });
-      addUserToLocalStorage({ name });
-      addEMailToLocalStorage({ email });
+      // addUserToLocalStorage({ name });
+      // addEMailToLocalStorage({ email });
 
     } catch (error) {
-       console.log(error.response)
-      // dispatch({
-      //   type: LOGIN_USER_ERROR,
-      //   payload: { msg: error.response.data.msg },
-      // });
+      //  console.log(error.response)
+      dispatch({
+        type: LOGIN_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
     }
-    clearAlert();
+    // clearAlert();
+    console.log(window.localStorage.name, window.localStorage.email, window.localStorage.token)
+    
+    axios.interceptors.request.use(function(config){
+      config.withCredentials = true
+      config.headers = {
+        token : window.localStorage.token
+        // Authorization : window.localStorage.token
+      }
+      console.log(config,"!!")
+      return config
+    },function(error){
+      return Promise.reject(error)
+    })
   };
 
   const addUserToLocalStorage = ({ name }) => {
@@ -217,6 +220,7 @@ const AppProvider = ({ children }) => {
   const getDashBoard = async (id) => {
     dispatch({ type: GET_DETAIL_BEGIN });
     try {
+      
       const { data } = await authFetch.post("/dashboard", { id });
       const { detail } = data;
       dispatch({

@@ -9,8 +9,8 @@ const links = [
   },
   {
     id: 2,
-    text: "profile",
-    path: "profile",
+    text: "compare",
+    path: "/compare",
     icon: <Icon icon="icomoon-free:profile" />,
   },
 ];
