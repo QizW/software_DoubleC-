@@ -116,6 +116,10 @@ const GetDashboard = async (req, res) => {
 //根据id删除
 const DeleteRepo = async (req, res) => {
   try {
+    if(req.body.category === 'common')
+    {
+      return res.status(201).json({msg : "fail!"})
+    }
     const test = await RepoSchema.deleteOne({ _id: ObjectId(req.body.id) });
     res.status(201).json({ msg: "success!" });
   } catch (err) {
@@ -452,9 +456,9 @@ const DataRangeChoose = async(req,res)=>{
     {
       for(var i in repo[0].commit_frequency)
       {
-        if(i >= info.begin && i <= info.end)
+        if(repo[0].commit_frequency[i].date >= info.begin && repo[0].commit_frequency[i].date <= info.end)
         {
-          answer[i] = repo[0].commit_frequency[i]
+          answer[repo[0].commit_frequency[i].date] = repo[0].commit_frequency[i].sum
         }
       }
     }
@@ -462,9 +466,9 @@ const DataRangeChoose = async(req,res)=>{
     {
       for(var i in repo[0].issue_frequency)
       {
-        if(i >= info.begin && i <= info.end)
+        if(repo[0].issue_frequency[i].date >= info.begin && repo[0].issue_frequency[i].date <= info.end)
         {
-          answer[i] = repo[0].issue_frequency[i]
+          answer[repo[0].issue_frequency[i].date] = repo[0].issue_frequency[i].sum
         }
       }
     }
@@ -510,9 +514,9 @@ const SigCompare = async(req, res)=>{
         answer.push({})
         for(var i in repo[0].commit_frequency)
         {
-          if(i >= info.begin[j] && i <= info.end[j])
+          if(repo[0].commit_frequency[i].date >= info.begin[j] && repo[0].commit_frequency[i].date <= info.end[j])
           {
-            answer[j][i] = repo[0].commit_frequency[i]
+            answer[j][repo[0].commit_frequency[i].date] = repo[0].commit_frequency[i].sum
           }
         }
       }
@@ -524,9 +528,9 @@ const SigCompare = async(req, res)=>{
         answer.push({})
         for(var i in repo[0].issue_frequency)
         {
-          if(i >= info.begin[j] && i <= info.end[j])
+          if(repo[0].issue_frequency[i].date >= info.begin[j] && repo[0].issue_frequency[i].date <= info.end[j])
           {
-            answer[j][i] = repo[0].issue_frequency[i]
+            answer[j][repo[0].issue_frequency[i].date] = repo[0].issue_frequency[i].sum
           }
         }
       }
@@ -541,7 +545,6 @@ const SigCompare = async(req, res)=>{
     {
       for(var k=0; k<answer.length; k++)
       {
-        console.log(answer.length)
         var resu =  Object.keys(answer[k]).sort();
         var answer1 = {}
         for(var i in resu)
@@ -590,9 +593,9 @@ const ComCompare = async(req, res)=>{
         answer.push({})
         for(var j in repo[i].commit_frequency)
         {
-          if(j >= info.begin && j <= info.end)
+          if(repo[i].commit_frequency[j].date >= info.begin && repo[i].commit_frequency[j].date <= info.end)
           {
-            answer[i][j] = repo[i].commit_frequency[j]
+            answer[i][repo[i].commit_frequency[j].date] = repo[i].commit_frequency[j].sum
           }
         }
       }
@@ -604,9 +607,9 @@ const ComCompare = async(req, res)=>{
         answer.push({})
         for(var j in repo[i].issue_frequency)
         {
-          if(j >= info.begin && j <= info.end)
+          if(repo[i].issue_frequency[j].date >= info.begin && repo[i].issue_frequency[j].date <= info.end)
           {
-            answer[i][j] = repo[i].issue_frequency[j]
+            answer[i][repo[i].issue_frequency[j].date] = repo[i].issue_frequency[j].sum
           }
         }
       }

@@ -39,7 +39,8 @@
 返回
 {
     name,
-    token
+    token,
+    catagory    'common','admin','vip'
 }
 
 /register 注册 post
@@ -203,6 +204,7 @@
 /delete 根据id删除仓库 post
 {
     id 仓库的id,可以通过搜索名字得到
+    category 用户等级
 }
 返回
 { msg: "success!" }或错误信息

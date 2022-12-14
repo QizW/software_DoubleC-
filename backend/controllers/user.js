@@ -24,6 +24,7 @@ const CheckUser = asyncWrapper(async (req, res, next) => {
       //他用的是标准status代表含义 即http自身规则，我们用起来还是很麻烦
       name: OldUser.username,
       token : 'Bearer '+tokenstr,
+      catagory : OldUser.category
     });
   } else {
     //错误中间件
