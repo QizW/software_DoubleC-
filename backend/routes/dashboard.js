@@ -13,7 +13,12 @@ const {
   GetCommunityDevelopment,
   SigCompare,
   ComCompare,
-  GetCertainIssue
+  GetCertainIssue,
+  GetAllCommits,
+  GetAllIssues,
+  GetCertainCommitter,
+
+
 
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
@@ -29,8 +34,10 @@ router.route("/SigCompare").post(SigCompare)
 router.route("/ComCompare").post(ComCompare)
 router.route("/GetCommunityDevelopment").post(GetCommunityDevelopment)
 router.route("/GetCertainIssue").post(GetCertainIssue)
+router.route("/GetAllCommits").post(GetAllCommits)
+router.route("/GetAllIssues").post(GetAllIssues)
+router.route("/GetCertainCommitter").post(GetCertainCommitter)
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);
-
 
 module.exports = router;
