@@ -19,7 +19,7 @@ const {
   GetCertainCommitter,
 
 
-
+  DesignAnalysis,
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
 
@@ -40,4 +40,5 @@ router.route("/GetCertainCommitter").post(GetCertainCommitter)
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);
 
+router.route("/DesignAnalysis").post(DesignAnalysis)
 module.exports = router;

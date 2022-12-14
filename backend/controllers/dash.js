@@ -697,7 +697,7 @@ const GetCertainIssue = async(req,res)=>{
     const repo = await RepoSchema.find({_id : info.id})
     const issues = repo[0].issue;
     for ( var i = 0; i <issues.length; i++){
-      if(issues[i].title.toString().search(info.keyword) != -1||issues[i].body.toString().search(info.keyword) != -1){
+      if((issues[i].title!==null&&(issues[i].title.toString().search(keyword[words][j].toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(keyword[words][j]) !== -1))){
         //console.log('find');
         var t = issues[i].created_at.substring(0, 10);
         //console.log(t)
@@ -809,7 +809,7 @@ const GetAllIssues = async(req,res)=>{
         res.status(404).json(err)
       }
     }
-const CountbyWeek = async(dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
+const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
   //console.log(Math.floor((Date.parse("2022-12-31") - Date.parse("1970-1-1"))/(1*24*60*60*1000))); //计算一下从2022-12-31到1970-1-1的天数，即目前来说不可能的最大天数
   // const dataByDay = {"2022-12-13": ("19"), 
   // "2022-12-12": ("28"), 
@@ -886,6 +886,107 @@ const CountbyWeek = async(dataByDay)=>{               //传递如下dataByDay样
   return result;
 }
 
+const CountbyMonth = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
+  var result = {};
+  for(var date in dataByDay){
+    var month = date.substring(0,7);
+    if(result[String(month)]===undefined){
+      result[String(month)] = 0
+    }
+    result[String(month)] += Number(dataByDay[date]);
+  }
+
+  console.log(result);
+  return result;
+}
+
+const CountbyYear = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
+  var result = {};
+  for(var date in dataByDay){
+    var year = date.substring(0,4);
+    if(result[String(year)]===undefined){
+      result[String(year)] = 0
+    }
+    result[String(year)] += Number(dataByDay[date]);
+  }
+
+  console.log(result);
+  return result;
+}
+
+
+const SelectRange = (dataByDay,begin,end)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
+  // const begin = "2022-10-25";
+  // const end = "2022-12-01";
+  var result = {};
+  for(var date in dataByDay){
+    if(date>=String(begin)&&date<=String(end)){
+      result[String(date)] = Number(dataByDay[date]);
+    }
+  }
+    
+
+  console.log(result);
+  return result;
+}
+
+
+const DesignAnalysis = async(req,res)=>{
+  console.log('into')
+  try{
+    var result = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
+    var keyword = {"code":["code","implement"],
+                   "maintainability":["maintain","future","plan","os","support","standard"],
+                   "testing":["test"],"robustness":["robust","safe","security"],
+                   "preformance":["preform","runtime","potimi"],
+                   "configuration":["config","flag","option"],
+                   "documentation":["document","file"],
+                   "clarification":["clarif","question","answer"]};
+
+    const info = req.body
+    const repo = await RepoSchema.find({_id : info.id})
+    const issues = repo[0].issue;
+    for ( var i = 0; i <issues.length; i++){
+      var t = issues[i].created_at.substring(0, 10);
+      console.log(issues[i].title)
+      //console.log(issues[i].title.toString().search("test")!= -1)
+      for(var words in keyword){
+        if(result[words][t]===undefined){
+          result[words][t] = 0;
+        }
+        //console.log(words)
+        for(var j = 0;j<keyword[words].length;j++){
+          //console.log(keyword[words][j].toString())
+          //console.log((issues[i].title.toString().search(keyword[words][j].toString()) !== -1));
+          if((issues[i].title!==null&&(issues[i].title.toString().search(keyword[words][j].toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(keyword[words][j]) !== -1))){
+            //console.log('find'+j);
+            if(t >= info.begin && t <= info.end){
+              result[words][t] += 1;
+            }
+            break;
+          }
+        }
+      }
+    }
+    console.log(result);
+    var final = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
+    final["code"] = CountbyWeek(result["code"]);
+    final["maintainability"] = CountbyWeek(result["maintainability"]);
+    final["testing"] = CountbyWeek(result["testing"]);
+    final["robustness"] = CountbyWeek(result["robustness"]);
+    final["preformance"] = CountbyWeek(result["preformance"]);
+    final["configuration"] = CountbyWeek(result["configuration"]);
+    final["documentation"] = CountbyWeek(result["documentation"]);
+    final["clarification"] = CountbyWeek(result["clarification"]);
+    res.status(201).json(final)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
+
+
 module.exports = {
   GetMessage,
   SearchRepoName,
@@ -899,4 +1000,5 @@ module.exports = {
   GetAllCommits,
   GetAllIssues,
   GetCertainCommitter,
+  DesignAnalysis,
 };
