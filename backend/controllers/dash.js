@@ -114,6 +114,28 @@ const SearchRepoName = async (req, res) => {
 const GetDashboard = async (req, res) => {
   try {
     const detail = await RepoSchema.findOne({ _id: ObjectId(req.body.id) });
+    let commit_frequency=detail.commit_frequency;
+    let date_sum_commit={}
+    let order={};
+    for (let i = 0; i < commit_frequency.length; i++) {
+      let date=commit_frequency[i].date.substring(0,10);
+      formalLength = Object.keys(order).length;
+      order[formalLength.toString()] = date;
+      date_sum_commit[date]=commit_frequency[i].sum;
+    }
+    console.log("date_sum_commit",date_sum_commit);
+    detail.commit_frequency=date_sum_commit;
+    let issue_frequency=detail.issue_frequency;
+    let date_sum_issue={}
+    order={};
+    for (let i = 0; i < issue_frequency.length; i++) {
+      let date=issue_frequency[i].date.substring(0,10);
+      formalLength = Object.keys(order).length;
+      order[formalLength.toString()] = date;
+      date_sum_issue[date]=issue_frequency[i].sum;
+    }
+    console.log("date_sum_issue",date_sum_issue);
+    detail.issue_frequency=date_sum_issue;
     res.status(201).json({ detail });
   } catch (err) {
     res.status(404).json(err);
