@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -20,6 +20,7 @@ const GetMessage = async (req, res) => {
       owner: req.body.owner,
       repo: req.body.repoName,
     });
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nRepo Message:",repoMessage.data,"\n!!!!!!!!!!!!!!!!!!!!!!");
     //这是在干嘛?看起来在插入数据库，应该是这样
     const CreateRepo = await RepoSchema.create({
       name: repoMessage.data.name,
@@ -48,6 +49,10 @@ const GetMessage = async (req, res) => {
           repoMessage.data.owner.login,
           repoMessage.data.name
       ),
+      company: await RepoGetCompany(
+          repoMessage.data.owner.login,
+          repoMessage.data.name
+      ),
       timeline: {
         created_at: repoMessage.data.created_at,
         updated_at: repoMessage.data.updated_at,
@@ -62,6 +67,7 @@ const GetMessage = async (req, res) => {
         repoMessage.data.name
       ),
     });
+    console.log("11111111111111111111111")
     res.status(201).json({ status: "success!" });
   } catch (err) {
     console.log("error:",err);
@@ -363,21 +369,7 @@ const RepoGetCommunity = async (owner, name) => {
   };
 };
 const GetCommunityDevelopment = async(req,res)=>{
-//   const commit = [{"date": "2022-12-13", "sum": ("21"), "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}}, 
-//   {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}}, 
-// {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}}, 
-// {"date": "2022-12-10", "sum": ("21"), "committer": {"Andrew Gu": ("1"), "Shen Li": ("1"), "Aaron Gokaslan": ("2"), "Sergii Dymchenko": ("1"), "Edward Z. Yang": ("3"), "blzheng": ("1"), "Jiewen Tan": ("1"), "Larry Liu": ("3"), "Zachary DeVito": ("2"), "PyTorch MergeBot": ("1"), "Digant Desai": ("1"), "Yanli Zhao": ("1"), "BowenBao": ("1"), "Wanchao Liang": ("1"), "Sherlock Huang": ("1")}}]
-//   //console.log('GetCommunityDevelopment');
-
-
-
-
-//   const issue = [{"date": "2022-12-13", "sum": ("28"), "issuer": {"jphdotam": ("1"), "pytorch-bot[bot]": ("1"), "chunyuan-w": ("2"), "kisseternity": ("1"), "vince62s": ("1"), "kaoalec": ("1"), "Valentine233": ("1"), "vedantroy": ("1"), "HDCharles": ("2"), "desertfire": ("1"), "mrshenli": ("1"), "mnuyens": ("1"), "bertmaher": ("1"), "rohan-varma": ("1"), "kit1980": ("1"), "jansel": ("2"), "SherlockNoMad": ("1"), "wanchaol": ("6"), "BowenBao": ("1"), "pytorchmergebot": ("1")}}, 
-//   {"date": "2022-12-12", "sum": ("40"), "issuer": {"jeffdaily": ("2"), "wconstab": ("1"), "eldar": ("1"), "bdhirsh": ("1"), "YassKa71": ("1"), "pearu": ("2"), "shubhambhokare1": ("1"), "voznesenskym": ("1"), "jbschlosser": ("4"), "XilunWu": ("2"), "yhcharles": ("1"), "malfet": ("1"), "mlazos": ("1"), "jxtps": ("1"), "desertfire": ("1"), "richqyz": ("1"), "ZainRizvi": ("1"), "AsiaCao": ("1"), "atalman": ("1"), "Skylion007": ("1"), "andrewor14": ("1"), "nikitaved": ("2"), "jithunnair-amd": ("1"), "moi90": ("1"), "cyyever": ("1"), "IdoAmit198": ("1"), "401qingkong": ("1"), "alanwaketan": ("2"), "kevalmorabia97": ("1"), "yanboliang": ("1"), "awgu": ("1"), "BolunDai0216": ("1")}}, 
-//   {"date": "2022-12-11", "sum": ("20"), "issuer": {"ezyang": ("2"), "salilsdesai": ("6"), "Feltenball": ("1"), "H-Huang": ("1"), "awgu": ("2"), "rnwang04": ("1"), "cyyever": ("1"), "voznesenskym": ("5"), "SherlockNoMad": ("1")}}, 
-//   {"date": "2022-12-10", "sum": ("19"), "issuer": {"andstor": ("1"), "akharedeepak": ("1"), "tugsbayasgalan": ("1"), "ezyang": ("1"), "Skylion007": ("1"), "nkaretnikov": ("1"), "rohan-varma": ("1"), "mctigger": ("1"), "wyli": ("1"), "ppwwyyxx": ("1"), "fxmarty": ("1"), "leslie-fang-intel": ("1"), "cyyever": ("1"), "knagrecha": ("1"), "XilunWu": ("2"), "kit1980": ("1"), "zdevito": ("1"), "awgu": ("1")}}, 
-//   {"date": "2022-12-09", "sum": ("49"), "issuer": {"knagrecha": ("1"), "zou3519": ("1"), "wconstab": ("2"), "JulesGM": ("1"), "davidberard98": ("1"), "swolchok": ("1"), "HDCharles": ("2"), "desertfire": ("2"), "zdevito": ("1"), "kit1980": ("1"), "eellison": ("1"), "mikekgfb": ("2"), "vadimkantorov": ("2"), "bdhirsh": ("2"), "min-jean-cho": ("1"), "vkuzo": ("1"), "diegogranziol": ("1"), "netw0rkf10w": ("2"), "Flamefire": ("1"), "awgu": ("3"), "MrSherish": ("1"), "H-Huang": ("1"), "javierbg": ("1"), "pmeier": ("1"), "Ascrypto": ("1"), "nikitaved": ("1"), "StevenTang1998": ("1"), "maxcurzi": ("2"), "ronzhou": ("1"), "Juelianqvq": ("1"), "aliencaocao": ("1"), "BLOrange-AMD": ("1"), "Inkorak": ("1"), "vors": ("1"), "cyyever": ("1"), "SOTAMak1r": ("1"), "peterbell10": ("1"), "yCobanoglu": ("1"), "michaelklachko": ("1")}}, 
-//   {"date": "2022-12-08", "sum": ("43"), "issuer": {"shingjan": ("1"), "Freed-Wu": ("1"), "mikekgfb": ("1"), "bdhirsh": ("1"), "williamwen42": ("1"), "cijerezg": ("1"), "kurtamohler": ("1"), "rohan-varma": ("2"), "xkszltl": ("1"), "facebook-github-bot": ("1"), "lendle": ("1"), "artkorenev": ("1"), "samdow": ("2"), "vfdev-5": ("1"), "ezyang": ("4"), "felixdivo": ("1"), "MikkelAntonsen": ("1"), "awgu": ("1"), "Vargol": ("1"), "anjali411": ("2"), "justinge": ("1"), "spyroot": ("1"), "kshitij12345": ("1"), "i-a-morozov": ("1"), "yanboliang": ("1"), "astroboylrx": ("1"), "Guitaricet": ("1"), "malfet": ("1"), "wanchaol": ("1"), "tito21": ("1"), "dzhulgakov": ("1"), "collindbell": ("1"), "kevalmorabia97": ("1"), "xw285cornell": ("1"), "jerryzh168": ("1"), "kulinseth": ("1"), "xwang233": ("1")}}]
+  //console.log('GetCommunityDevelopment');
   try{
     // console.log(req.body)
     var result = {}
@@ -463,6 +455,104 @@ const RepoGetIssue = async (owner, name) => {
   return result;
 };
 
+const RepoGetCompany = async (owner, name) => {
+  company = new Map;
+  user = new Map;
+  let count=1;
+  while (count<=10){
+    const NextStargazerMessage = await octokit.request(
+        "GET /repos/{owner}/{repo}/stargazers ",
+        {
+          owner: owner,
+          repo: name,
+          per_page: 100,
+          page: count
+        }
+    );
+    if (NextStargazerMessage.data.length===0) break;
+    else{
+      for (let i = 0; i < NextStargazerMessage.data.length; i++) {
+        const userMessage = await octokit.request("GET /users/{username}", {
+          username: NextStargazerMessage.data[i].login,
+        });
+        if (userMessage.data.company!=null&&!user.has(NextStargazerMessage.data[i].login)){
+          user.set(NextStargazerMessage.data[i].login,1);
+          if (company.has(userMessage.data.company)){
+            company.set(userMessage.data.company,company.get(userMessage.data.company)+1);
+          }
+          else{
+            company.set(userMessage.data.company,1);
+          }
+        }
+      }
+    }
+    count++;
+  }
+  count=1;
+  console.log("\n\nstargazer done!!!\n\n");
+  while (count<=10){
+    const NextIssueMessage = await octokit.request(
+        "GET /repos/{owner}/{repo}/issues ",
+        {
+          owner: owner,
+          repo: name,
+          per_page: 100,
+          page: count
+        }
+    );
+    if (NextIssueMessage.data.length===0) break;
+    else{
+      for (let i = 0; i < NextIssueMessage.data.length; i++) {
+        const userMessage = await octokit.request("GET /users/{username}", {
+          username: NextIssueMessage.data[i].user.login,
+        });
+        if (userMessage.data.company!=null&&!user.has(NextIssueMessage.data[i].user.login)){
+          user.set(NextIssueMessage.data[i].user.login,1);
+          if (company.has(userMessage.data.company)){
+            company.set(userMessage.data.company,company.get(userMessage.data.company)+1);
+          }
+          else{
+            company.set(userMessage.data.company,1);
+          }
+        }
+      }
+    }
+    count++;
+  }
+  console.log("\n\nissuer done!!!\n\n");
+  count=1;
+  while (count<=10){
+    const NextCommitMessage = await octokit.request(
+        "GET /repos/{owner}/{repo}/contributors ",
+        {
+          owner: owner,
+          repo: name,
+          per_page: 100,
+          page: count
+        }
+    );
+    if (NextCommitMessage.data.length===0) break;
+    else{
+      for (let i = 0; i < NextCommitMessage.data.length; i++) {
+        const userMessage = await octokit.request("GET /users/{username}", {
+          username: NextCommitMessage.data[i].login,
+        });
+        if (userMessage.data.company!=null&&!user.has(NextCommitMessage.data[i].login)){
+          user.set(NextCommitMessage.data[i].login,1);
+          if (company.has(userMessage.data.company)){
+            company.set(userMessage.data.company,company.get(userMessage.data.company)+1);
+          }
+          else{
+            company.set(userMessage.data.company,1);
+          }
+        }
+      }
+    }
+    count++;
+  }
+  console.log("\n\ncommitter done!!!\n\n");
+  return company;
+};
 
 const DataRangeChoose = async(req,res)=>{
   try{
@@ -640,8 +730,8 @@ const ComCompare = async(req, res)=>{
         answer[i]['forks'] = repo[i].forks
         answer[i]['stars'] = repo[i].stars
         answer[i]['open_issues'] = repo[i].open_issues
-        answer[i]['community_contributor '] = repo[i].community.contributor 
-        answer[i]['community_issuer'] = repo[i].community.issuer 
+        answer[i]['community_contributor '] = repo[i].community.contributor
+        answer[i]['community_issuer'] = repo[i].community.issuer
       }
     }
 
@@ -683,13 +773,13 @@ const ComCompare = async(req, res)=>{
 
 const GetCertainIssue = async(req,res)=>{
   // const issues = [
-  // {"title": "Importing torch causes segfault when using python installed with conda", 
-  // "body": "### \uD83D\uDC1B Describe the bug\n\nCross-posted to: https://discuss.pytorch.org/t/importing-torch-causes-segfault-when-using-python-installed-with-conda/168212\r\n\r\nI create a conda environment with: `conda create -y -n dev python=3.7`.\r\nIn install torch with:\r\n```\r\nconda run -n dev pip install torch==1.14.0.dev20221027+cu116 --pre --extra-index-url https://download.pytorch.org/whl/nightly/cu116\r\n```\r\n\r\nrunning: `python3 -c import torch` gives a segfault.\r\nHere's the gdb backtrace:\r\n\r\n```\r\n-c (gdb) r -c 'import torch'\r\nStarting program: /opt/conda/envs/dev/bin/python3 -c 'import torch'\r\n[Thread debugging using libthread_db enabled]\r\nUsing host libthread_db library \"/lib/x86_64-linux-gnu/libthread_db.so.1\".\r\n[Detaching after fork from child process 31265]\r\n\r\nProgram received signal SIGSEGV, Segmentation fault.\r\n0x000055555564d27c in type_name (context=<optimized out>, type=0x555558aa7630)\r\n    at /home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c:433\r\n433\t/home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c: No such file or directory.\r\n```\n\n### Versions\n\nThe script segfaults.", 
-  // "created_at": "2022-12-13T06:10:38Z"}, 
-  // {"title": "[ao] adding section to help users decide which quantization to use", 
+  // {"title": "Importing torch causes segfault when using python installed with conda",
+  // "body": "### \uD83D\uDC1B Describe the bug\n\nCross-posted to: https://discuss.pytorch.org/t/importing-torch-causes-segfault-when-using-python-installed-with-conda/168212\r\n\r\nI create a conda environment with: `conda create -y -n dev python=3.7`.\r\nIn install torch with:\r\n```\r\nconda run -n dev pip install torch==1.14.0.dev20221027+cu116 --pre --extra-index-url https://download.pytorch.org/whl/nightly/cu116\r\n```\r\n\r\nrunning: `python3 -c import torch` gives a segfault.\r\nHere's the gdb backtrace:\r\n\r\n```\r\n-c (gdb) r -c 'import torch'\r\nStarting program: /opt/conda/envs/dev/bin/python3 -c 'import torch'\r\n[Thread debugging using libthread_db enabled]\r\nUsing host libthread_db library \"/lib/x86_64-linux-gnu/libthread_db.so.1\".\r\n[Detaching after fork from child process 31265]\r\n\r\nProgram received signal SIGSEGV, Segmentation fault.\r\n0x000055555564d27c in type_name (context=<optimized out>, type=0x555558aa7630)\r\n    at /home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c:433\r\n433\t/home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c: No such file or directory.\r\n```\n\n### Versions\n\nThe script segfaults.",
+  // "created_at": "2022-12-13T06:10:38Z"},
+  // {"title": "[ao] adding section to help users decide which quantization to use",
   // "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90748\n\nSummary: adding a section to the docs that help users understand when to\nuse the many quantization tools\n\nTest Plan: just docs\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:",
-  // "created_at": "2022-12-13T04:21:51Z"}, 
-  // {"title": "temp", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #90748\n* __->__ #90747\n\nSummary:\n\nTest Plan:\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:", "created_at": "2022-12-13T04:21:46Z"}, 
+  // "created_at": "2022-12-13T04:21:51Z"},
+  // {"title": "temp", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #90748\n* __->__ #90747\n\nSummary:\n\nTest Plan:\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:", "created_at": "2022-12-13T04:21:46Z"},
   // {"title": "Revert \"[reland][dynamo] use optimizers correctly in benchmarking (#87492)\"", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90746\n\nThis reverts commit d91d7a322172da4d92672301f3cfa3344d544a9e.\n\ncc @mlazos @soumith @voznesenskym @yanboliang @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx", "created_at": "2022-12-13T03:43:04Z"}, {"title": "Fix FSDP checkpoint tests", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90745\n* #90621\n* #90620\n* #90579\n* #90523\n\n", "created_at": "2022-12-13T03:18:44Z"}, {"title": "feature: adding the ability to restore shapes after loading a traced model", "body": "Adds the ability to store inputs used in tracing models when calling torch.jit.save and restore the input shapes using torch.jit.load if the appropriate variables are set.\r\n\r\nFixes [89185](https://github.com/pytorch/pytorch/issues/89185)\r\n", "created_at": "2022-12-13T02:31:34Z"}, {"title": "[inductor] Pattern match cat->view*->pointwise and hoist pointwise", "body": "Summary:\nInductor can't fuse pointwise into the output of concat, but it can\nfuse into the inputs, and that's the same thing.  So we hoist pointwise through\na concat (followed by an optional series of views).\n\nTest Plan: New unit test\n\nDifferential Revision: D41901656\n\n\n\ncc @mlazos @soumith @voznesenskym @yanboliang @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx @peterbell10 @desertfire", "created_at": "2022-12-13T01:58:23Z"}, {"title": "Adopt full_backward_pre_hook in DDP", "body": "### \uD83D\uDE80 The feature, motivation and pitch\n\nSince https://github.com/pytorch/pytorch/pull/86700 has landed supporting the full backward pre hook, we should enable this with DDP for a true module level pre-backward hook and eliminate things such as _DDPSink.\n\n### Alternatives\n\n_No response_\n\n### Additional context\n\n_No response_\n\ncc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu", "created_at": "2022-12-13T01:54:01Z"}];
   try{
     var result = {}
@@ -719,10 +809,10 @@ const GetCertainIssue = async(req,res)=>{
   }
 }
 const GetAllCommits = async(req,res)=>{
-//   const commits = [{"date": "2022-12-13", "sum": ("21"), 
-// "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}}, 
-// {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}}, 
-// {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}}, 
+//   const commits = [{"date": "2022-12-13", "sum": ("21"),
+// "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}},
+// {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}},
+// {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}},
 // {"date": "2022-12-10", "sum": ("21"), "committer": {"Andrew Gu": ("1"), "Shen Li": ("1"), "Aaron Gokaslan": ("2"), "Sergii Dymchenko": ("1"), "Edward Z. Yang": ("3"), "blzheng": ("1"), "Jiewen Tan": ("1"), "Larry Liu": ("3"), "Zachary DeVito": ("2"), "PyTorch MergeBot": ("1"), "Digant Desai": ("1"), "Yanli Zhao": ("1"), "BowenBao": ("1"), "Wanchao Liang": ("1"), "Sherlock Huang": ("1")}}];
   try{
     var result = {}
@@ -751,9 +841,9 @@ const GetAllCommits = async(req,res)=>{
   }
 }
 const GetAllIssues = async(req,res)=>{
-//   const issues = [{"date": "2022-12-13", "sum": ("28"), "issuer": {"jphdotam": ("1"), "pytorch-bot[bot]": ("1"), "chunyuan-w": ("2"), "kisseternity": ("1"), "vince62s": ("1"), "kaoalec": ("1"), "Valentine233": ("1"), "vedantroy": ("1"), "HDCharles": ("2"), "desertfire": ("1"), "mrshenli": ("1"), "mnuyens": ("1"), "bertmaher": ("1"), "rohan-varma": ("1"), "kit1980": ("1"), "jansel": ("2"), "SherlockNoMad": ("1"), "wanchaol": ("6"), "BowenBao": ("1"), "pytorchmergebot": ("1")}}, 
-// {"date": "2022-12-12", "sum": ("40"), "issuer": {"jeffdaily": ("2"), "wconstab": ("1"), "eldar": ("1"), "bdhirsh": ("1"), "YassKa71": ("1"), "pearu": ("2"), "shubhambhokare1": ("1"), "voznesenskym": ("1"), "jbschlosser": ("4"), "XilunWu": ("2"), "yhcharles": ("1"), "malfet": ("1"), "mlazos": ("1"), "jxtps": ("1"), "desertfire": ("1"), "richqyz": ("1"), "ZainRizvi": ("1"), "AsiaCao": ("1"), "atalman": ("1"), "Skylion007": ("1"), "andrewor14": ("1"), "nikitaved": ("2"), "jithunnair-amd": ("1"), "moi90": ("1"), "cyyever": ("1"), "IdoAmit198": ("1"), "401qingkong": ("1"), "alanwaketan": ("2"), "kevalmorabia97": ("1"), "yanboliang": ("1"), "awgu": ("1"), "BolunDai0216": ("1")}}, 
-// {"date": "2022-12-11", "sum": ("20"), "issuer": {"ezyang": ("2"), "salilsdesai": ("6"), "Feltenball": ("1"), "H-Huang": ("1"), "awgu": ("2"), "rnwang04": ("1"), "cyyever": ("1"), "voznesenskym": ("5"), "SherlockNoMad": ("1")}}, 
+//   const issues = [{"date": "2022-12-13", "sum": ("28"), "issuer": {"jphdotam": ("1"), "pytorch-bot[bot]": ("1"), "chunyuan-w": ("2"), "kisseternity": ("1"), "vince62s": ("1"), "kaoalec": ("1"), "Valentine233": ("1"), "vedantroy": ("1"), "HDCharles": ("2"), "desertfire": ("1"), "mrshenli": ("1"), "mnuyens": ("1"), "bertmaher": ("1"), "rohan-varma": ("1"), "kit1980": ("1"), "jansel": ("2"), "SherlockNoMad": ("1"), "wanchaol": ("6"), "BowenBao": ("1"), "pytorchmergebot": ("1")}},
+// {"date": "2022-12-12", "sum": ("40"), "issuer": {"jeffdaily": ("2"), "wconstab": ("1"), "eldar": ("1"), "bdhirsh": ("1"), "YassKa71": ("1"), "pearu": ("2"), "shubhambhokare1": ("1"), "voznesenskym": ("1"), "jbschlosser": ("4"), "XilunWu": ("2"), "yhcharles": ("1"), "malfet": ("1"), "mlazos": ("1"), "jxtps": ("1"), "desertfire": ("1"), "richqyz": ("1"), "ZainRizvi": ("1"), "AsiaCao": ("1"), "atalman": ("1"), "Skylion007": ("1"), "andrewor14": ("1"), "nikitaved": ("2"), "jithunnair-amd": ("1"), "moi90": ("1"), "cyyever": ("1"), "IdoAmit198": ("1"), "401qingkong": ("1"), "alanwaketan": ("2"), "kevalmorabia97": ("1"), "yanboliang": ("1"), "awgu": ("1"), "BolunDai0216": ("1")}},
+// {"date": "2022-12-11", "sum": ("20"), "issuer": {"ezyang": ("2"), "salilsdesai": ("6"), "Feltenball": ("1"), "H-Huang": ("1"), "awgu": ("2"), "rnwang04": ("1"), "cyyever": ("1"), "voznesenskym": ("5"), "SherlockNoMad": ("1")}},
 // {"date": "2022-12-10", "sum": ("19"), "issuer": {"andstor": ("1"), "akharedeepak": ("1"), "tugsbayasgalan": ("1"), "ezyang": ("1"), "Skylion007": ("1"), "nkaretnikov": ("1"), "rohan-varma": ("1"), "mctigger": ("1"), "wyli": ("1"), "ppwwyyxx": ("1"), "fxmarty": ("1"), "leslie-fang-intel": ("1"), "cyyever": ("1"), "knagrecha": ("1"), "XilunWu": ("2"), "kit1980": ("1"), "zdevito": ("1"), "awgu": ("1")}}]
   try{
       var result = {}
@@ -783,10 +873,10 @@ const GetAllIssues = async(req,res)=>{
   }
 
   const GetCertainCommitter = async(req,res)=>{
-    //   const commits = [{"date": "2022-12-13", "sum": ("21"), 
-    // "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}}, 
-    // {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}}, 
-    // {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}}, 
+    //   const commits = [{"date": "2022-12-13", "sum": ("21"),
+    // "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}},
+    // {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}},
+    // {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}},
     // {"date": "2022-12-10", "sum": ("21"), "committer": {"Andrew Gu": ("1"), "Shen Li": ("1"), "Aaron Gokaslan": ("2"), "Sergii Dymchenko": ("1"), "Edward Z. Yang": ("3"), "blzheng": ("1"), "Jiewen Tan": ("1"), "Larry Liu": ("3"), "Zachary DeVito": ("2"), "PyTorch MergeBot": ("1"), "Digant Desai": ("1"), "Yanli Zhao": ("1"), "BowenBao": ("1"), "Wanchao Liang": ("1"), "Sherlock Huang": ("1")}}];
       try{
         var result = {}
@@ -811,35 +901,35 @@ const GetAllIssues = async(req,res)=>{
     }
 const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
   //console.log(Math.floor((Date.parse("2022-12-31") - Date.parse("1970-1-1"))/(1*24*60*60*1000))); //计算一下从2022-12-31到1970-1-1的天数，即目前来说不可能的最大天数
-  // const dataByDay = {"2022-12-13": ("19"), 
-  // "2022-12-12": ("28"), 
-  // "2022-12-11": ("17"), 
-  // "2022-12-10": ("21"), 
-  // "2022-12-09": ("41"), 
-  // "2022-12-08": ("65"), "2022-12-07": ("36"), "2022-12-06": ("62"), 
-  // "2022-12-05": ("27"), "2022-12-04": ("9"), "2022-12-03": ("13"), 
-  // "2022-12-02": ("42"), "2022-12-01": ("49"), "2022-11-30": ("61"), 
-  // "2022-11-29": ("39"), "2022-11-28": ("49"), "2022-11-27": ("12"), 
-  // "2022-11-26": ("3"), "2022-11-25": ("15"), "2022-11-24": ("32"), 
-  // "2022-11-23": ("50"), "2022-11-22": ("44"), "2022-11-21": ("25"), 
-  // "2022-11-20": ("6"), "2022-11-19": ("21"), "2022-11-18": ("50"), 
-  // "2022-11-17": ("52"), "2022-11-16": ("63"), "2022-11-15": ("46"), 
+  // const dataByDay = {"2022-12-13": ("19"),
+  // "2022-12-12": ("28"),
+  // "2022-12-11": ("17"),
+  // "2022-12-10": ("21"),
+  // "2022-12-09": ("41"),
+  // "2022-12-08": ("65"), "2022-12-07": ("36"), "2022-12-06": ("62"),
+  // "2022-12-05": ("27"), "2022-12-04": ("9"), "2022-12-03": ("13"),
+  // "2022-12-02": ("42"), "2022-12-01": ("49"), "2022-11-30": ("61"),
+  // "2022-11-29": ("39"), "2022-11-28": ("49"), "2022-11-27": ("12"),
+  // "2022-11-26": ("3"), "2022-11-25": ("15"), "2022-11-24": ("32"),
+  // "2022-11-23": ("50"), "2022-11-22": ("44"), "2022-11-21": ("25"),
+  // "2022-11-20": ("6"), "2022-11-19": ("21"), "2022-11-18": ("50"),
+  // "2022-11-17": ("52"), "2022-11-16": ("63"), "2022-11-15": ("46"),
   // "2022-11-14": ("30"), "2022-11-13": ("15"), "2022-11-12": ("20"),
   //  "2022-11-11": ("44"), "2022-11-10": ("49"), "2022-11-09": ("40"),
-  //   "2022-11-08": ("41"), "2022-11-07": ("35"), "2022-11-06": ("1"), 
+  //   "2022-11-08": ("41"), "2022-11-07": ("35"), "2022-11-06": ("1"),
   //   "2022-11-05": ("12"), "2022-11-04": ("38"), "2022-11-03": ("54"),
   //    "2022-11-02": ("78"), "2022-11-01": ("56"), "2022-10-31": ("45"),
-  //     "2022-10-30": ("5"), "2022-10-29": ("25"), "2022-10-28": ("48"), 
-  //     "2022-10-27": ("35"), "2022-10-26": ("57"), "2022-10-25": ("54"), 
-  //     "2022-10-24": ("43"), "2022-10-23": ("8"), "2022-10-22": ("10"), 
-  //     "2022-10-21": ("49"), "2022-10-20": ("41"), "2022-10-19": ("44"), 
-  //     "2022-10-18": ("52"), "2022-10-17": ("42"), "2022-10-16": ("10"), 
-  //     "2022-10-15": ("16"), "2022-10-14": ("38"), "2022-10-13": ("58"), 
-  //     "2022-10-12": ("36"), "2022-10-11": ("49"), "2022-10-10": ("29"), 
-  //     "2022-10-09": ("10"), "2022-10-08": ("12"), "2022-10-07": ("51"), 
-  //     "2022-10-06": ("46"), "2022-10-05": ("36"), "2022-10-04": ("21"), 
+  //     "2022-10-30": ("5"), "2022-10-29": ("25"), "2022-10-28": ("48"),
+  //     "2022-10-27": ("35"), "2022-10-26": ("57"), "2022-10-25": ("54"),
+  //     "2022-10-24": ("43"), "2022-10-23": ("8"), "2022-10-22": ("10"),
+  //     "2022-10-21": ("49"), "2022-10-20": ("41"), "2022-10-19": ("44"),
+  //     "2022-10-18": ("52"), "2022-10-17": ("42"), "2022-10-16": ("10"),
+  //     "2022-10-15": ("16"), "2022-10-14": ("38"), "2022-10-13": ("58"),
+  //     "2022-10-12": ("36"), "2022-10-11": ("49"), "2022-10-10": ("29"),
+  //     "2022-10-09": ("10"), "2022-10-08": ("12"), "2022-10-07": ("51"),
+  //     "2022-10-06": ("46"), "2022-10-05": ("36"), "2022-10-04": ("21"),
   //     "2022-10-03": ("56"), "2022-10-02": ("17"), "2022-10-01": ("11"), "2022-09-30": ("61"), "2022-09-29": ("50"), "2022-09-28": ("68"), "2022-09-27": ("52"), "2022-09-26": ("22"), "2022-09-25": ("9"), "2022-09-24": ("15"), "2022-09-23": ("50"), "2022-09-22": ("32"), "2022-09-21": ("50"), "2022-09-20": ("29"), "2022-09-19": ("25"), "2022-09-18": ("4"), "2022-09-17": ("27"), "2022-09-16": ("44"), "2022-09-15": ("33"), "2022-09-14": ("34"), "2022-09-13": ("39"), "2022-09-12": ("32"), "2022-09-11": ("1"), "2022-09-10": ("13"), "2022-09-09": ("47"), "2022-09-08": ("30"), "2022-09-07": ("43"), "2022-09-06": ("31"), "2022-09-05": ("11"), "2022-09-04": ("2"), "2022-09-03": ("4"), "2022-09-02": ("21"), "2022-09-01": ("48"), "2022-08-31": ("34"), "2022-08-30": ("41"), "2022-08-29": ("35"), "2022-08-28": ("13"), "2022-08-27": ("11"), "2022-08-26": ("34"), "2022-08-25": ("43"), "2022-08-24": ("50"), "2022-08-23": ("43"), "2022-08-22": ("42"), "2022-08-21": ("7"), "2022-08-20": ("9"), "2022-08-19": ("51"), "2022-08-18": ("44"), "2022-08-17": ("45"), "2022-08-16": ("51"), "2022-08-15": ("23"), "2022-08-14": ("3"), "2022-08-13": ("12"), "2022-08-12": ("34"), "2022-08-11": ("43"), "2022-08-10": ("48"), "2022-08-09": ("37"), "2022-08-08": ("42"), "2022-08-07": ("10"), "2022-08-06": ("21"), "2022-08-05": ("39"), "2022-08-04": ("43"), "2022-08-03": ("51"), "2022-08-02": ("34"), "2022-08-01": ("33"), "2022-07-31": ("2"), "2022-07-30": ("8"), "2022-07-29": ("35")};
-  
+
   var basedate = "1970-1-1";
   var days = 0;
   var result = {};
@@ -866,7 +956,7 @@ const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式�
     }
     temp[String(days)] = date;
   }
-  
+
  // console.log(days);
   for(var i = max;i>=min;i = i-7){
     var tempdate = new Date(i * 1*24*60*60*1000);

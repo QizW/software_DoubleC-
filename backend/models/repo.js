@@ -47,6 +47,9 @@ const Repo = new mongoose.Schema({
     issue:{
         type:[Object]
     },
+    company:{
+        type:[Object]
+    },
     timeline:{
         type:Object
     },
