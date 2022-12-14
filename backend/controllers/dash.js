@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -391,34 +391,47 @@ const RepoGetCommunity = async (owner, name) => {
   };
 };
 const GetCommunityDevelopment = async(req,res)=>{
+//   const commit = [{"date": "2022-12-13", "sum": ("21"), "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}}, 
+//   {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}}, 
+// {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}}, 
+// {"date": "2022-12-10", "sum": ("21"), "committer": {"Andrew Gu": ("1"), "Shen Li": ("1"), "Aaron Gokaslan": ("2"), "Sergii Dymchenko": ("1"), "Edward Z. Yang": ("3"), "blzheng": ("1"), "Jiewen Tan": ("1"), "Larry Liu": ("3"), "Zachary DeVito": ("2"), "PyTorch MergeBot": ("1"), "Digant Desai": ("1"), "Yanli Zhao": ("1"), "BowenBao": ("1"), "Wanchao Liang": ("1"), "Sherlock Huang": ("1")}}]
+//   //console.log('GetCommunityDevelopment');
+//   const issue = [{"date": "2022-12-13", "sum": ("28"), "issuer": {"jphdotam": ("1"), "pytorch-bot[bot]": ("1"), "chunyuan-w": ("2"), "kisseternity": ("1"), "vince62s": ("1"), "kaoalec": ("1"), "Valentine233": ("1"), "vedantroy": ("1"), "HDCharles": ("2"), "desertfire": ("1"), "mrshenli": ("1"), "mnuyens": ("1"), "bertmaher": ("1"), "rohan-varma": ("1"), "kit1980": ("1"), "jansel": ("2"), "SherlockNoMad": ("1"), "wanchaol": ("6"), "BowenBao": ("1"), "pytorchmergebot": ("1")}}, 
+//   {"date": "2022-12-12", "sum": ("40"), "issuer": {"jeffdaily": ("2"), "wconstab": ("1"), "eldar": ("1"), "bdhirsh": ("1"), "YassKa71": ("1"), "pearu": ("2"), "shubhambhokare1": ("1"), "voznesenskym": ("1"), "jbschlosser": ("4"), "XilunWu": ("2"), "yhcharles": ("1"), "malfet": ("1"), "mlazos": ("1"), "jxtps": ("1"), "desertfire": ("1"), "richqyz": ("1"), "ZainRizvi": ("1"), "AsiaCao": ("1"), "atalman": ("1"), "Skylion007": ("1"), "andrewor14": ("1"), "nikitaved": ("2"), "jithunnair-amd": ("1"), "moi90": ("1"), "cyyever": ("1"), "IdoAmit198": ("1"), "401qingkong": ("1"), "alanwaketan": ("2"), "kevalmorabia97": ("1"), "yanboliang": ("1"), "awgu": ("1"), "BolunDai0216": ("1")}}, 
+//   {"date": "2022-12-11", "sum": ("20"), "issuer": {"ezyang": ("2"), "salilsdesai": ("6"), "Feltenball": ("1"), "H-Huang": ("1"), "awgu": ("2"), "rnwang04": ("1"), "cyyever": ("1"), "voznesenskym": ("5"), "SherlockNoMad": ("1")}}, 
+//   {"date": "2022-12-10", "sum": ("19"), "issuer": {"andstor": ("1"), "akharedeepak": ("1"), "tugsbayasgalan": ("1"), "ezyang": ("1"), "Skylion007": ("1"), "nkaretnikov": ("1"), "rohan-varma": ("1"), "mctigger": ("1"), "wyli": ("1"), "ppwwyyxx": ("1"), "fxmarty": ("1"), "leslie-fang-intel": ("1"), "cyyever": ("1"), "knagrecha": ("1"), "XilunWu": ("2"), "kit1980": ("1"), "zdevito": ("1"), "awgu": ("1")}}, 
+//   {"date": "2022-12-09", "sum": ("49"), "issuer": {"knagrecha": ("1"), "zou3519": ("1"), "wconstab": ("2"), "JulesGM": ("1"), "davidberard98": ("1"), "swolchok": ("1"), "HDCharles": ("2"), "desertfire": ("2"), "zdevito": ("1"), "kit1980": ("1"), "eellison": ("1"), "mikekgfb": ("2"), "vadimkantorov": ("2"), "bdhirsh": ("2"), "min-jean-cho": ("1"), "vkuzo": ("1"), "diegogranziol": ("1"), "netw0rkf10w": ("2"), "Flamefire": ("1"), "awgu": ("3"), "MrSherish": ("1"), "H-Huang": ("1"), "javierbg": ("1"), "pmeier": ("1"), "Ascrypto": ("1"), "nikitaved": ("1"), "StevenTang1998": ("1"), "maxcurzi": ("2"), "ronzhou": ("1"), "Juelianqvq": ("1"), "aliencaocao": ("1"), "BLOrange-AMD": ("1"), "Inkorak": ("1"), "vors": ("1"), "cyyever": ("1"), "SOTAMak1r": ("1"), "peterbell10": ("1"), "yCobanoglu": ("1"), "michaelklachko": ("1")}}, 
+//   {"date": "2022-12-08", "sum": ("43"), "issuer": {"shingjan": ("1"), "Freed-Wu": ("1"), "mikekgfb": ("1"), "bdhirsh": ("1"), "williamwen42": ("1"), "cijerezg": ("1"), "kurtamohler": ("1"), "rohan-varma": ("2"), "xkszltl": ("1"), "facebook-github-bot": ("1"), "lendle": ("1"), "artkorenev": ("1"), "samdow": ("2"), "vfdev-5": ("1"), "ezyang": ("4"), "felixdivo": ("1"), "MikkelAntonsen": ("1"), "awgu": ("1"), "Vargol": ("1"), "anjali411": ("2"), "justinge": ("1"), "spyroot": ("1"), "kshitij12345": ("1"), "i-a-morozov": ("1"), "yanboliang": ("1"), "astroboylrx": ("1"), "Guitaricet": ("1"), "malfet": ("1"), "wanchaol": ("1"), "tito21": ("1"), "dzhulgakov": ("1"), "collindbell": ("1"), "kevalmorabia97": ("1"), "xw285cornell": ("1"), "jerryzh168": ("1"), "kulinseth": ("1"), "xwang233": ("1")}}]
   //console.log('GetCommunityDevelopment');
   try{
-    // console.log(req.body)
     var result = {}
     const info = req.body
-    //console.log(req.body)
     const repo = await RepoSchema.find({_id : info.id})
     const commit = repo[0].commit_frequency;
     const issue = repo[0].issue_frequency;
+    var begin = info.begin;
+    var end = info.end;
+    if(begin === ''){
+      begin = '1970-01-01';
+    }
+    if(end === ''){
+      end = '2024-01-01';
+    }
     for ( var i = 0; i <issue.length; i++){
+      
       //console.log(result[issue[i].date]);
-      if(issue[i].date >= info.begin && issue[i].date <= info.end){
+      if(issue[i].date >= begin && issue[i].date <= end){
         if(result[issue[i].date]===undefined){
           result[issue[i].date] = 0;
         }
         result[issue[i].date] += Number(issue[i].sum);
       }
     }
-    //console.log(result)
     for ( var i = 0; i <commit.length; i++){
-      if(commit[i].date >= info.begin && commit[i].date <= info.end){
-        //console.log('compare')
-        //console.log(result[commit[i].date]);
+      if(commit[i].date >= begin && commit[i].date <= end){
         if(result[commit[i].date]===undefined){
           result[commit[i].date] = 0;
         }
-        // console.log('commit[i].sum')
-        // console.log(commit[i].sum)
         result[commit[i].date] += Number(commit[i].sum);
       }
     }
@@ -578,7 +591,6 @@ const RepoGetCompany = async (owner, name) => {
 
 const DataRangeChoose = async(req,res)=>{
   try{
-    // console.log(req.body)
     var answer = {}
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
@@ -794,26 +806,25 @@ const ComCompare = async(req, res)=>{
 }
 
 const GetCertainIssue = async(req,res)=>{
-  // const issues = [
-  // {"title": "Importing torch causes segfault when using python installed with conda",
-  // "body": "### \uD83D\uDC1B Describe the bug\n\nCross-posted to: https://discuss.pytorch.org/t/importing-torch-causes-segfault-when-using-python-installed-with-conda/168212\r\n\r\nI create a conda environment with: `conda create -y -n dev python=3.7`.\r\nIn install torch with:\r\n```\r\nconda run -n dev pip install torch==1.14.0.dev20221027+cu116 --pre --extra-index-url https://download.pytorch.org/whl/nightly/cu116\r\n```\r\n\r\nrunning: `python3 -c import torch` gives a segfault.\r\nHere's the gdb backtrace:\r\n\r\n```\r\n-c (gdb) r -c 'import torch'\r\nStarting program: /opt/conda/envs/dev/bin/python3 -c 'import torch'\r\n[Thread debugging using libthread_db enabled]\r\nUsing host libthread_db library \"/lib/x86_64-linux-gnu/libthread_db.so.1\".\r\n[Detaching after fork from child process 31265]\r\n\r\nProgram received signal SIGSEGV, Segmentation fault.\r\n0x000055555564d27c in type_name (context=<optimized out>, type=0x555558aa7630)\r\n    at /home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c:433\r\n433\t/home/conda/feedstock_root/build_artifacts/python_1635226063427/work/Objects/typeobject.c: No such file or directory.\r\n```\n\n### Versions\n\nThe script segfaults.",
-  // "created_at": "2022-12-13T06:10:38Z"},
-  // {"title": "[ao] adding section to help users decide which quantization to use",
-  // "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90748\n\nSummary: adding a section to the docs that help users understand when to\nuse the many quantization tools\n\nTest Plan: just docs\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:",
-  // "created_at": "2022-12-13T04:21:51Z"},
-  // {"title": "temp", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #90748\n* __->__ #90747\n\nSummary:\n\nTest Plan:\n\nReviewers:\n\nSubscribers:\n\nTasks:\n\nTags:", "created_at": "2022-12-13T04:21:46Z"},
-  // {"title": "Revert \"[reland][dynamo] use optimizers correctly in benchmarking (#87492)\"", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90746\n\nThis reverts commit d91d7a322172da4d92672301f3cfa3344d544a9e.\n\ncc @mlazos @soumith @voznesenskym @yanboliang @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx", "created_at": "2022-12-13T03:43:04Z"}, {"title": "Fix FSDP checkpoint tests", "body": "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #90745\n* #90621\n* #90620\n* #90579\n* #90523\n\n", "created_at": "2022-12-13T03:18:44Z"}, {"title": "feature: adding the ability to restore shapes after loading a traced model", "body": "Adds the ability to store inputs used in tracing models when calling torch.jit.save and restore the input shapes using torch.jit.load if the appropriate variables are set.\r\n\r\nFixes [89185](https://github.com/pytorch/pytorch/issues/89185)\r\n", "created_at": "2022-12-13T02:31:34Z"}, {"title": "[inductor] Pattern match cat->view*->pointwise and hoist pointwise", "body": "Summary:\nInductor can't fuse pointwise into the output of concat, but it can\nfuse into the inputs, and that's the same thing.  So we hoist pointwise through\na concat (followed by an optional series of views).\n\nTest Plan: New unit test\n\nDifferential Revision: D41901656\n\n\n\ncc @mlazos @soumith @voznesenskym @yanboliang @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx @peterbell10 @desertfire", "created_at": "2022-12-13T01:58:23Z"}, {"title": "Adopt full_backward_pre_hook in DDP", "body": "### \uD83D\uDE80 The feature, motivation and pitch\n\nSince https://github.com/pytorch/pytorch/pull/86700 has landed supporting the full backward pre hook, we should enable this with DDP for a true module level pre-backward hook and eliminate things such as _DDPSink.\n\n### Alternatives\n\n_No response_\n\n### Additional context\n\n_No response_\n\ncc @mrshenli @pritamdamania87 @zhaojuanmao @satgera @gqchen @aazzolini @osalpekar @jiayisuse @H-Huang @kwen2501 @awgu", "created_at": "2022-12-13T01:54:01Z"}];
   try{
     var result = {}
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
     const issues = repo[0].issue;
+    var begin = info.begin;
+    var end = info.end;
+    if(begin === ''){
+      begin = '1970-01-01';
+    }
+    if(end === ''){
+      end = '2024-01-01';
+    }
+    console.log("-----------------begin::        "+begin+"        ::begin-----------------");
+    console.log("-----------------end::        "+end+"        ::end-----------------");
     for ( var i = 0; i <issues.length; i++){
-      if((issues[i].title!==null&&(issues[i].title.toString().search(keyword[words][j].toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(keyword[words][j]) !== -1))){
-        //console.log('find');
+      if((issues[i].title!==null&&(issues[i].title.toString().search(info.keyword.toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(info.keyword) !== -1))){
         var t = issues[i].created_at.substring(0, 10);
-        //console.log(t)
-        if(t >= info.begin && t <= info.end){
+        if(t >= begin && t <= end){
           if(result[t]===undefined){
             result[t] = 1;
           }
@@ -841,8 +852,16 @@ const GetAllCommits = async(req,res)=>{
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
     const commits = repo[0].commit_frequency;
+    var begin = info.begin;
+    var end = info.end;
+    if(begin === ''){
+      begin = '1970-01-01';
+    }
+    if(end === ''){
+      end = '2024-01-01';
+    }
     for ( var i = 0; i <commits.length; i++){
-      if(commits[i].date >= info.begin && commits[i].date <= info.end){
+      if(commits[i].date >= begin && commits[i].date <= end){
         var committers = commits[i].committer;
         for ( var j in committers){
           //console.log(j);
@@ -872,8 +891,16 @@ const GetAllIssues = async(req,res)=>{
       const info = req.body
       const repo = await RepoSchema.find({_id : info.id})
       const issues = repo[0].issue_frequency;
+      var begin = info.begin;
+      var end = info.end;
+      if(begin === ''){
+        begin = '1970-01-01';
+      }
+      if(end === ''){
+        end = '2024-01-01';
+      }
       for ( var i = 0; i <issues.length; i++){
-        if(issues[i].date >= info.begin && issues[i].date <= info.end){
+        if(issues[i].date >= begin && issues[i].date <= end){
           var issuers = issues[i].issuer;
           for ( var j in issuers){
             //console.log(j);
@@ -906,8 +933,17 @@ const GetAllIssues = async(req,res)=>{
         //console.log(info.name)
         const repo = await RepoSchema.find({_id : info.id})
         const commits = repo[0].commit_frequency;
+
+        var begin = info.begin;
+        var end = info.end;
+        if(begin === ''){
+          begin = '1970-01-01';
+        }
+        if(end === ''){
+          end = '2024-01-01';
+        }
         for ( var i = 0; i <commits.length; i++){
-          if(commits[i].date >= info.begin && commits[i].date <= info.end){
+          if(commits[i].date >= begin && commits[i].date <= end){
             if(info.name in commits[i].committer){
               //console.log('find')
               result[commits[i].date] = Number(commits[i].committer[info.name]);
@@ -952,7 +988,7 @@ const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式�
   //     "2022-10-06": ("46"), "2022-10-05": ("36"), "2022-10-04": ("21"),
   //     "2022-10-03": ("56"), "2022-10-02": ("17"), "2022-10-01": ("11"), "2022-09-30": ("61"), "2022-09-29": ("50"), "2022-09-28": ("68"), "2022-09-27": ("52"), "2022-09-26": ("22"), "2022-09-25": ("9"), "2022-09-24": ("15"), "2022-09-23": ("50"), "2022-09-22": ("32"), "2022-09-21": ("50"), "2022-09-20": ("29"), "2022-09-19": ("25"), "2022-09-18": ("4"), "2022-09-17": ("27"), "2022-09-16": ("44"), "2022-09-15": ("33"), "2022-09-14": ("34"), "2022-09-13": ("39"), "2022-09-12": ("32"), "2022-09-11": ("1"), "2022-09-10": ("13"), "2022-09-09": ("47"), "2022-09-08": ("30"), "2022-09-07": ("43"), "2022-09-06": ("31"), "2022-09-05": ("11"), "2022-09-04": ("2"), "2022-09-03": ("4"), "2022-09-02": ("21"), "2022-09-01": ("48"), "2022-08-31": ("34"), "2022-08-30": ("41"), "2022-08-29": ("35"), "2022-08-28": ("13"), "2022-08-27": ("11"), "2022-08-26": ("34"), "2022-08-25": ("43"), "2022-08-24": ("50"), "2022-08-23": ("43"), "2022-08-22": ("42"), "2022-08-21": ("7"), "2022-08-20": ("9"), "2022-08-19": ("51"), "2022-08-18": ("44"), "2022-08-17": ("45"), "2022-08-16": ("51"), "2022-08-15": ("23"), "2022-08-14": ("3"), "2022-08-13": ("12"), "2022-08-12": ("34"), "2022-08-11": ("43"), "2022-08-10": ("48"), "2022-08-09": ("37"), "2022-08-08": ("42"), "2022-08-07": ("10"), "2022-08-06": ("21"), "2022-08-05": ("39"), "2022-08-04": ("43"), "2022-08-03": ("51"), "2022-08-02": ("34"), "2022-08-01": ("33"), "2022-07-31": ("2"), "2022-07-30": ("8"), "2022-07-29": ("35")};
 
-  var basedate = "1970-1-1";
+  var basedate = "1970-01-01";
   var days = 0;
   var result = {};
   var temp = {};
@@ -1058,6 +1094,14 @@ const DesignAnalysis = async(req,res)=>{
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
     const issues = repo[0].issue;
+    var begin = info.begin;
+    var end = info.end;
+    if(begin === ''){
+      begin = '1970-01-01';
+    }
+    if(end === ''){
+      end = '2024-01-01';
+    }
     for ( var i = 0; i <issues.length; i++){
       var t = issues[i].created_at.substring(0, 10);
       console.log(issues[i].title)
@@ -1072,7 +1116,7 @@ const DesignAnalysis = async(req,res)=>{
           //console.log((issues[i].title.toString().search(keyword[words][j].toString()) !== -1));
           if((issues[i].title!==null&&(issues[i].title.toString().search(keyword[words][j].toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(keyword[words][j]) !== -1))){
             //console.log('find'+j);
-            if(t >= info.begin && t <= info.end){
+            if(t >= begin && t <= end){
               result[words][t] += 1;
             }
             break;
