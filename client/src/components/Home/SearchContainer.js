@@ -19,6 +19,7 @@ import Alert from "../Alert";
 import FormRow from "../../components/FormRow";
 import { useAppContext } from "../../context/appContext";
 import { Icon } from "@iconify/react";
+import { Link } from "react-router-dom";
 
 const initialRepoInfo = {
   owner: "",
@@ -111,6 +112,9 @@ const SearchContainer = () => {
               <Button color="primary" onClick={toggleRepos}>
                 {viewMyRepos ? "view all repos" : "view my repos"}
               </Button>
+              <Link to={`/analyzePytorch`} className="btn edit-btn">
+                Analyze PyTorch
+              </Link>
             </Stack>
           </Toolbar>
         </AppBar>

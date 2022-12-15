@@ -6,6 +6,7 @@ import { Card, CardHeader, Box } from "@mui/material";
 import BaseOptionChart from "./BaseOptionChart";
 const DevelopingSpeedChart = (data) => {
     const Data = data.data
+    console.log(Data)
     // 存放具体数值
     var ds = [];
     // 存放日期

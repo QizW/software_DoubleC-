@@ -1,4 +1,5 @@
 // 点击对应仓库的view按钮后所展示的页面
+//pytorchID:63973b6579b0905501ff42a7
 import { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import Loading from "../components/Loading";
@@ -38,6 +39,7 @@ export default function DashboardApp() {
   } = detail;
 
   console.log(detail)
+  console.log(id)
   if (isLoading) {
     return <Loading center />;
   } else {

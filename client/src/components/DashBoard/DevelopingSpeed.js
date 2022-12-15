@@ -34,7 +34,7 @@ const authFetch = axios.create({
 });
 
 const DevelopingSpeed = (id) => {
-    
+    console.log(id)
   const [beginTime,SetBeginTime] = useState("");
   const [endTime,SetEndTime] = useState("");
   const [developingSpeed,SetDevelopingSpeed] = useState({});
@@ -50,7 +50,9 @@ const DevelopingSpeed = (id) => {
   const handleSubmit = async () => {
       const ID = id.id;
       try{
+        console.log({"id":ID , "begin":beginTime, "end":endTime})
           var tmp  = await authFetch.post("/GetCommunityDevelopment",{"id":ID , "begin":beginTime, "end":endTime});
+          console.log(tmp)
           SetDevelopingSpeed(tmp.data);
       }
       catch(error){

@@ -5,7 +5,6 @@ import { Card, CardHeader, Box } from "@mui/material";
 import BaseOptionChart from "./BaseOptionChart";
 
 const IssueAnalyzeChart = (data) => {
-    console.log(data)
     const Data = data.data
     var date = [];
     var value = [];

@@ -114,6 +114,7 @@ const SearchRepoName = async (req, res) => {
 //根据id搜索
 const GetDashboard = async (req, res) => {
   try {
+    console.log(req.body)
     const detail = await RepoSchema.findOne({ _id: ObjectId(req.body.id) });
     let commit_frequency=detail.commit_frequency;
     let date_sum_commit={}
@@ -137,6 +138,7 @@ const GetDashboard = async (req, res) => {
     }
     console.log("date_sum_issue",date_sum_issue);
     detail.issue_frequency=date_sum_issue;
+    console.log({detail})
     res.status(201).json({ detail });
   } catch (err) {
     res.status(404).json(err);
@@ -1163,6 +1165,7 @@ const DesignAnalysis = async(req,res)=>{
 const CompanyInfo = async(req,res)=>{
   try{
     var result = {};
+    console.log(req.body)
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
     //console.log(repo[0].company)
@@ -1194,7 +1197,7 @@ const CompanyInfo = async(req,res)=>{
       }
       final[temp16] += Number(company[name]);
     } 
-    //console.log(final);
+    console.log(final);
     var result = {};
     for(var name in final){
       result[name.toLowerCase()] = 0;
