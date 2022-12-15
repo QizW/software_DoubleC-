@@ -104,7 +104,6 @@ const SearchRepoName = async (req, res) => {
       };
       repos.push(eachRepo);
     }
-    // console.log(repos,"?");
     return res.status(201).json({ repos });
   } catch (err) {
     // console.log("!!!")
@@ -1047,7 +1046,7 @@ const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式�
 const CountbyMonth = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
   var result = {};
   for(var date in dataByDay){
-    var month = date.substring(0,7)+"-15";
+    var month = date.substring(0,7);
     if(result[String(month)]===undefined){
       result[String(month)] = 0
     }
@@ -1107,7 +1106,7 @@ const DesignAnalysis = async(req,res)=>{
     if(repo[0].name==='pytorch'){
       console.log('pytorch')
       issues = await IssueSchema.find()
-      console.log(issues)
+      //console.log(issues)
     }
     else{
       console.log("other");
@@ -1122,21 +1121,26 @@ const DesignAnalysis = async(req,res)=>{
     if(end === ''){
       end = '2024-01-01';
     }
+    console.log(begin)
+    console.log(end)
     for ( var i = 0; i <issues.length; i++){
       var t = issues[i].created_at.substring(0, 10);
-      for(var words in keyword){
-        if(result[words][t]===undefined){
-          result[words][t] = 0;
-        }
-        for(var j = 0;j<keyword[words].length;j++){
-          if((issues[i].title!==null&&(issues[i].title.toString().toUpperCase().search(keyword[words][j].toString().toUpperCase()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().toUpperCase().search(keyword[words][j].toUpperCase()) !== -1))){
-            if(t >= begin && t <= end){
-              result[words][t] += 1;
+      if(t >= begin && t <= end){
+        for(var words in keyword){
+          if(result[words][t]===undefined){
+            result[words][t] = 0;
+          }
+          for(var j = 0;j<keyword[words].length;j++){
+            if((issues[i].title!==null&&(issues[i].title.toString().toUpperCase().search(keyword[words][j].toString().toUpperCase()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().toUpperCase().search(keyword[words][j].toUpperCase()) !== -1))){
+              if(t >= begin && t <= end){
+                result[words][t] += 1;
+              }
+              break;
             }
-            break;
           }
         }
       }
+      
     }
     //console.log(result);
     var final = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
@@ -1164,7 +1168,7 @@ const CompanyInfo = async(req,res)=>{
     //console.log(repo[0].company)
     const company = repo[0].company[0];
     
-    //console.log(company)
+    console.log(company)
     var final = {};
     for(var name in company){
      //console.log(temp)
