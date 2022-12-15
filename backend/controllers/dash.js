@@ -1,6 +1,8 @@
 const asyncWrapper = require("../middleware/async");
 const { createCustomError } = require("../errors/custom-error");
 const RepoSchema = require("../models/repo");
+const IssueSchema = require("../models/issue");
+
 //mongodb b站有教程，有时间我去康康
 const ObjectId = require("mongodb").ObjectId;
 
@@ -814,7 +816,15 @@ const GetCertainIssue = async(req,res)=>{
     var result = {}
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
-    const issues = repo[0].issue;
+    if(repo[0].name==='pytorch'){
+      console.log('pytorch')
+      issues = await IssueSchema.find()
+      console.log(issues)
+    }
+    else{
+      console.log("other");
+      issues = repo[0].issue;
+    }
     var begin = info.begin;
     var end = info.end;
     if(begin === ''){
@@ -1018,7 +1028,7 @@ const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式�
     for(var j = 0;j<=6;j++){
       if(temp[String(i-j)]!==undefined){
         var afterdate = String(beforedate).substring(0, 10);
-        console.log(afterdate)
+        //console.log(afterdate)
         if(result[afterdate] === undefined){
           result[afterdate] = 0;
         }
@@ -1077,6 +1087,8 @@ const SelectRange = (dataByDay,begin,end)=>{               //传递如下dataByD
 
 
 const DesignAnalysis = async(req,res)=>{
+  //6399c719c62122b82210de84
+  //63981728399f1e9bbd21d89b //pytorch
   //console.log('into')
   try{
     var result = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
@@ -1090,7 +1102,17 @@ const DesignAnalysis = async(req,res)=>{
 
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
-    const issues = repo[0].issue;
+    var issues
+    if(repo[0].name==='pytorch'){
+      console.log('pytorch')
+      issues = await IssueSchema.find()
+      console.log(issues)
+    }
+    else{
+      console.log("other");
+      issues = repo[0].issue;
+    }
+    
     var begin = info.begin;
     var end = info.end;
     if(begin === ''){
