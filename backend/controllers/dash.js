@@ -391,18 +391,6 @@ const RepoGetCommunity = async (owner, name) => {
   };
 };
 const GetCommunityDevelopment = async(req,res)=>{
-//   const commit = [{"date": "2022-12-13", "sum": ("21"), "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}}, 
-//   {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}}, 
-// {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}}, 
-// {"date": "2022-12-10", "sum": ("21"), "committer": {"Andrew Gu": ("1"), "Shen Li": ("1"), "Aaron Gokaslan": ("2"), "Sergii Dymchenko": ("1"), "Edward Z. Yang": ("3"), "blzheng": ("1"), "Jiewen Tan": ("1"), "Larry Liu": ("3"), "Zachary DeVito": ("2"), "PyTorch MergeBot": ("1"), "Digant Desai": ("1"), "Yanli Zhao": ("1"), "BowenBao": ("1"), "Wanchao Liang": ("1"), "Sherlock Huang": ("1")}}]
-//   //console.log('GetCommunityDevelopment');
-//   const issue = [{"date": "2022-12-13", "sum": ("28"), "issuer": {"jphdotam": ("1"), "pytorch-bot[bot]": ("1"), "chunyuan-w": ("2"), "kisseternity": ("1"), "vince62s": ("1"), "kaoalec": ("1"), "Valentine233": ("1"), "vedantroy": ("1"), "HDCharles": ("2"), "desertfire": ("1"), "mrshenli": ("1"), "mnuyens": ("1"), "bertmaher": ("1"), "rohan-varma": ("1"), "kit1980": ("1"), "jansel": ("2"), "SherlockNoMad": ("1"), "wanchaol": ("6"), "BowenBao": ("1"), "pytorchmergebot": ("1")}}, 
-//   {"date": "2022-12-12", "sum": ("40"), "issuer": {"jeffdaily": ("2"), "wconstab": ("1"), "eldar": ("1"), "bdhirsh": ("1"), "YassKa71": ("1"), "pearu": ("2"), "shubhambhokare1": ("1"), "voznesenskym": ("1"), "jbschlosser": ("4"), "XilunWu": ("2"), "yhcharles": ("1"), "malfet": ("1"), "mlazos": ("1"), "jxtps": ("1"), "desertfire": ("1"), "richqyz": ("1"), "ZainRizvi": ("1"), "AsiaCao": ("1"), "atalman": ("1"), "Skylion007": ("1"), "andrewor14": ("1"), "nikitaved": ("2"), "jithunnair-amd": ("1"), "moi90": ("1"), "cyyever": ("1"), "IdoAmit198": ("1"), "401qingkong": ("1"), "alanwaketan": ("2"), "kevalmorabia97": ("1"), "yanboliang": ("1"), "awgu": ("1"), "BolunDai0216": ("1")}}, 
-//   {"date": "2022-12-11", "sum": ("20"), "issuer": {"ezyang": ("2"), "salilsdesai": ("6"), "Feltenball": ("1"), "H-Huang": ("1"), "awgu": ("2"), "rnwang04": ("1"), "cyyever": ("1"), "voznesenskym": ("5"), "SherlockNoMad": ("1")}}, 
-//   {"date": "2022-12-10", "sum": ("19"), "issuer": {"andstor": ("1"), "akharedeepak": ("1"), "tugsbayasgalan": ("1"), "ezyang": ("1"), "Skylion007": ("1"), "nkaretnikov": ("1"), "rohan-varma": ("1"), "mctigger": ("1"), "wyli": ("1"), "ppwwyyxx": ("1"), "fxmarty": ("1"), "leslie-fang-intel": ("1"), "cyyever": ("1"), "knagrecha": ("1"), "XilunWu": ("2"), "kit1980": ("1"), "zdevito": ("1"), "awgu": ("1")}}, 
-//   {"date": "2022-12-09", "sum": ("49"), "issuer": {"knagrecha": ("1"), "zou3519": ("1"), "wconstab": ("2"), "JulesGM": ("1"), "davidberard98": ("1"), "swolchok": ("1"), "HDCharles": ("2"), "desertfire": ("2"), "zdevito": ("1"), "kit1980": ("1"), "eellison": ("1"), "mikekgfb": ("2"), "vadimkantorov": ("2"), "bdhirsh": ("2"), "min-jean-cho": ("1"), "vkuzo": ("1"), "diegogranziol": ("1"), "netw0rkf10w": ("2"), "Flamefire": ("1"), "awgu": ("3"), "MrSherish": ("1"), "H-Huang": ("1"), "javierbg": ("1"), "pmeier": ("1"), "Ascrypto": ("1"), "nikitaved": ("1"), "StevenTang1998": ("1"), "maxcurzi": ("2"), "ronzhou": ("1"), "Juelianqvq": ("1"), "aliencaocao": ("1"), "BLOrange-AMD": ("1"), "Inkorak": ("1"), "vors": ("1"), "cyyever": ("1"), "SOTAMak1r": ("1"), "peterbell10": ("1"), "yCobanoglu": ("1"), "michaelklachko": ("1")}}, 
-//   {"date": "2022-12-08", "sum": ("43"), "issuer": {"shingjan": ("1"), "Freed-Wu": ("1"), "mikekgfb": ("1"), "bdhirsh": ("1"), "williamwen42": ("1"), "cijerezg": ("1"), "kurtamohler": ("1"), "rohan-varma": ("2"), "xkszltl": ("1"), "facebook-github-bot": ("1"), "lendle": ("1"), "artkorenev": ("1"), "samdow": ("2"), "vfdev-5": ("1"), "ezyang": ("4"), "felixdivo": ("1"), "MikkelAntonsen": ("1"), "awgu": ("1"), "Vargol": ("1"), "anjali411": ("2"), "justinge": ("1"), "spyroot": ("1"), "kshitij12345": ("1"), "i-a-morozov": ("1"), "yanboliang": ("1"), "astroboylrx": ("1"), "Guitaricet": ("1"), "malfet": ("1"), "wanchaol": ("1"), "tito21": ("1"), "dzhulgakov": ("1"), "collindbell": ("1"), "kevalmorabia97": ("1"), "xw285cornell": ("1"), "jerryzh168": ("1"), "kulinseth": ("1"), "xwang233": ("1")}}]
-  //console.log('GetCommunityDevelopment');
   try{
     var result = {}
     const info = req.body
@@ -435,7 +423,23 @@ const GetCommunityDevelopment = async(req,res)=>{
         result[commit[i].date] += Number(commit[i].sum);
       }
     }
-    res.status(201).json(result)
+    var final = result;
+    var length = 0;
+    for(var obj in result){
+      length++;
+    }
+    if(length>50){
+      final = CountbyWeek(result)
+    }
+    length = 0;
+    for(var obj in final){
+      length++;
+    }
+    if(length>50){
+      final = CountbyMonth(result)
+    }
+    //console.log(final)
+    res.status(201).json(final)
   }
   catch(err)
   {
@@ -819,10 +823,8 @@ const GetCertainIssue = async(req,res)=>{
     if(end === ''){
       end = '2024-01-01';
     }
-    console.log("-----------------begin::        "+begin+"        ::begin-----------------");
-    console.log("-----------------end::        "+end+"        ::end-----------------");
     for ( var i = 0; i <issues.length; i++){
-      if((issues[i].title!==null&&(issues[i].title.toString().search(info.keyword.toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(info.keyword) !== -1))){
+      if((issues[i].title!==null&&(issues[i].title.toString().toUpperCase().search(info.keyword.toString().toUpperCase()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().toUpperCase().search(info.keyword.toString().toUpperCase()) !== -1))){
         var t = issues[i].created_at.substring(0, 10);
         if(t >= begin && t <= end){
           if(result[t]===undefined){
@@ -834,7 +836,22 @@ const GetCertainIssue = async(req,res)=>{
         }
       }
     }
-    res.status(201).json(result)
+    var final = result;
+    var length = 0;
+    for(var obj in result){
+      length++;
+    }
+    if(length>50){
+      final = CountbyWeek(result)
+    }
+    length = 0;
+    for(var obj in final){
+      length++;
+    }
+    if(length>50){
+      final = CountbyMonth(result)
+    }
+    res.status(201).json(final)
   }
   catch(err)
   {
@@ -842,13 +859,9 @@ const GetCertainIssue = async(req,res)=>{
   }
 }
 const GetAllCommits = async(req,res)=>{
-//   const commits = [{"date": "2022-12-13", "sum": ("21"),
-// "committer": {"ecao": ("1"), "Jiewen Tan": ("2"), "Andrew Gu": ("1"), "XiaobingSuper": ("1"), "Andrew M. James": ("1"), "Jithun Nair": ("1"), "mantaionut": ("1"), "soulitzer": ("1"), "Wanchao Liang": ("5"), "Eli Uriegas": ("1"), "PyTorch MergeBot": ("2"), "Driss Guessous": ("1"), "Sergii Dymchenko": ("1"), "Jerry Zhang": ("1"), "Kevin Wang": ("1")}},
-// {"date": "2022-12-12", "sum": ("28"), "committer": {"soulitzer": ("1"), "William Wen": ("1"), "Philip Meier": ("1"), "Laurent Mazare": ("1"), "Yanbo Liang": ("2"), "HDCharles": ("1"), "Catherine Lee": ("1"), "BowenBao": ("2"), "Jeff Daily": ("1"), "Soumith Chintala": ("1"), "Aaron Gokaslan": ("1"), "Peter Bell": ("1"), "Sean Ross-Ross": ("1"), "PyTorch MergeBot": ("2"), "Edward Z. Yang": ("5"), "Michael Voznesensky": ("1"), "Yuxin Wu": ("1"), "XiaobingSuper": ("1"), "Bert Maher": ("3")}},
-// {"date": "2022-12-11", "sum": ("17"), "committer": {"Yuxin Wu": ("2"), "Michael Voznesensky": ("2"), "Edward Z. Yang": ("2"), "Aaron Gokaslan": ("2"), "Jiong Gong": ("1"), "PyTorch MergeBot": ("1"), "Shen Li": ("2"), "Andrew Gu": ("4"), "Rohan Varma": ("1")}},
-// {"date": "2022-12-10", "sum": ("21"), "committer": {"Andrew Gu": ("1"), "Shen Li": ("1"), "Aaron Gokaslan": ("2"), "Sergii Dymchenko": ("1"), "Edward Z. Yang": ("3"), "blzheng": ("1"), "Jiewen Tan": ("1"), "Larry Liu": ("3"), "Zachary DeVito": ("2"), "PyTorch MergeBot": ("1"), "Digant Desai": ("1"), "Yanli Zhao": ("1"), "BowenBao": ("1"), "Wanchao Liang": ("1"), "Sherlock Huang": ("1")}}];
-  try{
+    try{
     var result = {}
+    console.log(req.body)
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
     const commits = repo[0].commit_frequency;
@@ -874,6 +887,7 @@ const GetAllCommits = async(req,res)=>{
         }
       }
     }
+    console.log(result);
     res.status(201).json(result)
   }
   catch(err)
@@ -882,10 +896,6 @@ const GetAllCommits = async(req,res)=>{
   }
 }
 const GetAllIssues = async(req,res)=>{
-//   const issues = [{"date": "2022-12-13", "sum": ("28"), "issuer": {"jphdotam": ("1"), "pytorch-bot[bot]": ("1"), "chunyuan-w": ("2"), "kisseternity": ("1"), "vince62s": ("1"), "kaoalec": ("1"), "Valentine233": ("1"), "vedantroy": ("1"), "HDCharles": ("2"), "desertfire": ("1"), "mrshenli": ("1"), "mnuyens": ("1"), "bertmaher": ("1"), "rohan-varma": ("1"), "kit1980": ("1"), "jansel": ("2"), "SherlockNoMad": ("1"), "wanchaol": ("6"), "BowenBao": ("1"), "pytorchmergebot": ("1")}},
-// {"date": "2022-12-12", "sum": ("40"), "issuer": {"jeffdaily": ("2"), "wconstab": ("1"), "eldar": ("1"), "bdhirsh": ("1"), "YassKa71": ("1"), "pearu": ("2"), "shubhambhokare1": ("1"), "voznesenskym": ("1"), "jbschlosser": ("4"), "XilunWu": ("2"), "yhcharles": ("1"), "malfet": ("1"), "mlazos": ("1"), "jxtps": ("1"), "desertfire": ("1"), "richqyz": ("1"), "ZainRizvi": ("1"), "AsiaCao": ("1"), "atalman": ("1"), "Skylion007": ("1"), "andrewor14": ("1"), "nikitaved": ("2"), "jithunnair-amd": ("1"), "moi90": ("1"), "cyyever": ("1"), "IdoAmit198": ("1"), "401qingkong": ("1"), "alanwaketan": ("2"), "kevalmorabia97": ("1"), "yanboliang": ("1"), "awgu": ("1"), "BolunDai0216": ("1")}},
-// {"date": "2022-12-11", "sum": ("20"), "issuer": {"ezyang": ("2"), "salilsdesai": ("6"), "Feltenball": ("1"), "H-Huang": ("1"), "awgu": ("2"), "rnwang04": ("1"), "cyyever": ("1"), "voznesenskym": ("5"), "SherlockNoMad": ("1")}},
-// {"date": "2022-12-10", "sum": ("19"), "issuer": {"andstor": ("1"), "akharedeepak": ("1"), "tugsbayasgalan": ("1"), "ezyang": ("1"), "Skylion007": ("1"), "nkaretnikov": ("1"), "rohan-varma": ("1"), "mctigger": ("1"), "wyli": ("1"), "ppwwyyxx": ("1"), "fxmarty": ("1"), "leslie-fang-intel": ("1"), "cyyever": ("1"), "knagrecha": ("1"), "XilunWu": ("2"), "kit1980": ("1"), "zdevito": ("1"), "awgu": ("1")}}]
   try{
       var result = {}
       const info = req.body
@@ -950,7 +960,22 @@ const GetAllIssues = async(req,res)=>{
             }
           }
         }
-        res.status(201).json(result)
+        var final = result;
+        var length = 0;
+        for(var obj in result){
+          length++;
+        }
+        if(length>30){
+          final = CountbyWeek(result)
+        }
+        length = 0;
+        for(var obj in final){
+          length++;
+        }
+        if(length>50){
+          final = CountbyMonth(result)
+        }
+        res.status(201).json(final)
       }
       catch(err)
       {
@@ -958,36 +983,6 @@ const GetAllIssues = async(req,res)=>{
       }
     }
 const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
-  //console.log(Math.floor((Date.parse("2022-12-31") - Date.parse("1970-1-1"))/(1*24*60*60*1000))); //计算一下从2022-12-31到1970-1-1的天数，即目前来说不可能的最大天数
-  // const dataByDay = {"2022-12-13": ("19"),
-  // "2022-12-12": ("28"),
-  // "2022-12-11": ("17"),
-  // "2022-12-10": ("21"),
-  // "2022-12-09": ("41"),
-  // "2022-12-08": ("65"), "2022-12-07": ("36"), "2022-12-06": ("62"),
-  // "2022-12-05": ("27"), "2022-12-04": ("9"), "2022-12-03": ("13"),
-  // "2022-12-02": ("42"), "2022-12-01": ("49"), "2022-11-30": ("61"),
-  // "2022-11-29": ("39"), "2022-11-28": ("49"), "2022-11-27": ("12"),
-  // "2022-11-26": ("3"), "2022-11-25": ("15"), "2022-11-24": ("32"),
-  // "2022-11-23": ("50"), "2022-11-22": ("44"), "2022-11-21": ("25"),
-  // "2022-11-20": ("6"), "2022-11-19": ("21"), "2022-11-18": ("50"),
-  // "2022-11-17": ("52"), "2022-11-16": ("63"), "2022-11-15": ("46"),
-  // "2022-11-14": ("30"), "2022-11-13": ("15"), "2022-11-12": ("20"),
-  //  "2022-11-11": ("44"), "2022-11-10": ("49"), "2022-11-09": ("40"),
-  //   "2022-11-08": ("41"), "2022-11-07": ("35"), "2022-11-06": ("1"),
-  //   "2022-11-05": ("12"), "2022-11-04": ("38"), "2022-11-03": ("54"),
-  //    "2022-11-02": ("78"), "2022-11-01": ("56"), "2022-10-31": ("45"),
-  //     "2022-10-30": ("5"), "2022-10-29": ("25"), "2022-10-28": ("48"),
-  //     "2022-10-27": ("35"), "2022-10-26": ("57"), "2022-10-25": ("54"),
-  //     "2022-10-24": ("43"), "2022-10-23": ("8"), "2022-10-22": ("10"),
-  //     "2022-10-21": ("49"), "2022-10-20": ("41"), "2022-10-19": ("44"),
-  //     "2022-10-18": ("52"), "2022-10-17": ("42"), "2022-10-16": ("10"),
-  //     "2022-10-15": ("16"), "2022-10-14": ("38"), "2022-10-13": ("58"),
-  //     "2022-10-12": ("36"), "2022-10-11": ("49"), "2022-10-10": ("29"),
-  //     "2022-10-09": ("10"), "2022-10-08": ("12"), "2022-10-07": ("51"),
-  //     "2022-10-06": ("46"), "2022-10-05": ("36"), "2022-10-04": ("21"),
-  //     "2022-10-03": ("56"), "2022-10-02": ("17"), "2022-10-01": ("11"), "2022-09-30": ("61"), "2022-09-29": ("50"), "2022-09-28": ("68"), "2022-09-27": ("52"), "2022-09-26": ("22"), "2022-09-25": ("9"), "2022-09-24": ("15"), "2022-09-23": ("50"), "2022-09-22": ("32"), "2022-09-21": ("50"), "2022-09-20": ("29"), "2022-09-19": ("25"), "2022-09-18": ("4"), "2022-09-17": ("27"), "2022-09-16": ("44"), "2022-09-15": ("33"), "2022-09-14": ("34"), "2022-09-13": ("39"), "2022-09-12": ("32"), "2022-09-11": ("1"), "2022-09-10": ("13"), "2022-09-09": ("47"), "2022-09-08": ("30"), "2022-09-07": ("43"), "2022-09-06": ("31"), "2022-09-05": ("11"), "2022-09-04": ("2"), "2022-09-03": ("4"), "2022-09-02": ("21"), "2022-09-01": ("48"), "2022-08-31": ("34"), "2022-08-30": ("41"), "2022-08-29": ("35"), "2022-08-28": ("13"), "2022-08-27": ("11"), "2022-08-26": ("34"), "2022-08-25": ("43"), "2022-08-24": ("50"), "2022-08-23": ("43"), "2022-08-22": ("42"), "2022-08-21": ("7"), "2022-08-20": ("9"), "2022-08-19": ("51"), "2022-08-18": ("44"), "2022-08-17": ("45"), "2022-08-16": ("51"), "2022-08-15": ("23"), "2022-08-14": ("3"), "2022-08-13": ("12"), "2022-08-12": ("34"), "2022-08-11": ("43"), "2022-08-10": ("48"), "2022-08-09": ("37"), "2022-08-08": ("42"), "2022-08-07": ("10"), "2022-08-06": ("21"), "2022-08-05": ("39"), "2022-08-04": ("43"), "2022-08-03": ("51"), "2022-08-02": ("34"), "2022-08-01": ("33"), "2022-07-31": ("2"), "2022-07-30": ("8"), "2022-07-29": ("35")};
-
   var basedate = "1970-01-01";
   var days = 0;
   var result = {};
@@ -1019,46 +1014,48 @@ const CountbyWeek = (dataByDay)=>{               //传递如下dataByDay样式�
   for(var i = max;i>=min;i = i-7){
     var tempdate = new Date(i * 1*24*60*60*1000);
     var beforedate = tempdate.toISOString()
-    //console.log(finaldate);
+    //console.log(beforedate)
     for(var j = 0;j<=6;j++){
       if(temp[String(i-j)]!==undefined){
         var afterdate = String(beforedate).substring(0, 10);
+        console.log(afterdate)
         if(result[afterdate] === undefined){
           result[afterdate] = 0;
         }
         result[afterdate] += Number(dataByDay[temp[String(i-j)]]);
       }
     }
+    if(result[String(beforedate).substring(0, 10)] === undefined){
+      result[String(beforedate).substring(0, 10)] = 0;
+    }
   }
-  console.log(result);
+  //console.log(result);
   return result;
 }
 
 const CountbyMonth = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
   var result = {};
   for(var date in dataByDay){
-    var month = date.substring(0,7);
+    var month = date.substring(0,7)+"-15";
     if(result[String(month)]===undefined){
       result[String(month)] = 0
     }
     result[String(month)] += Number(dataByDay[date]);
   }
-
-  console.log(result);
   return result;
 }
 
 const CountbyYear = (dataByDay)=>{               //传递如下dataByDay样式参数，可以转换为以星期为单位的数据
   var result = {};
   for(var date in dataByDay){
-    var year = date.substring(0,4);
+    var year = date.substring(0,4)+"-01-01";
     if(result[String(year)]===undefined){
       result[String(year)] = 0
     }
     result[String(year)] += Number(dataByDay[date]);
   }
 
-  console.log(result);
+  //console.log(result);
   return result;
 }
 
@@ -1074,18 +1071,18 @@ const SelectRange = (dataByDay,begin,end)=>{               //传递如下dataByD
   }
     
 
-  console.log(result);
+  //console.log(result);
   return result;
 }
 
 
 const DesignAnalysis = async(req,res)=>{
-  console.log('into')
+  //console.log('into')
   try{
     var result = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
-    var keyword = {"code":["code","implement"],
+    var keyword = {"code":["cod","implement"],
                    "maintainability":["maintain","future","plan","os","support","standard"],
-                   "testing":["test"],"robustness":["robust","safe","security"],
+                   "testing":["test","bug"],"robustness":["robust","safe","security"],
                    "preformance":["preform","runtime","potimi"],
                    "configuration":["config","flag","option"],
                    "documentation":["document","file"],
@@ -1104,18 +1101,12 @@ const DesignAnalysis = async(req,res)=>{
     }
     for ( var i = 0; i <issues.length; i++){
       var t = issues[i].created_at.substring(0, 10);
-      console.log(issues[i].title)
-      //console.log(issues[i].title.toString().search("test")!= -1)
       for(var words in keyword){
         if(result[words][t]===undefined){
           result[words][t] = 0;
         }
-        //console.log(words)
         for(var j = 0;j<keyword[words].length;j++){
-          //console.log(keyword[words][j].toString())
-          //console.log((issues[i].title.toString().search(keyword[words][j].toString()) !== -1));
-          if((issues[i].title!==null&&(issues[i].title.toString().search(keyword[words][j].toString()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().search(keyword[words][j]) !== -1))){
-            //console.log('find'+j);
+          if((issues[i].title!==null&&(issues[i].title.toString().toUpperCase().search(keyword[words][j].toString().toUpperCase()) !== -1))||(issues[i].body!==null&&(issues[i].body.toString().toUpperCase().search(keyword[words][j].toUpperCase()) !== -1))){
             if(t >= begin && t <= end){
               result[words][t] += 1;
             }
@@ -1124,7 +1115,7 @@ const DesignAnalysis = async(req,res)=>{
         }
       }
     }
-    console.log(result);
+    //console.log(result);
     var final = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
     final["code"] = CountbyWeek(result["code"]);
     final["maintainability"] = CountbyWeek(result["maintainability"]);
@@ -1142,6 +1133,71 @@ const DesignAnalysis = async(req,res)=>{
   }
 }
 
+const CompanyInfo = async(req,res)=>{
+  try{
+    var result = {};
+    const info = req.body
+    const repo = await RepoSchema.find({_id : info.id})
+    //console.log(repo[0].company)
+    const company = repo[0].company[0];
+    
+    //console.log(company)
+    var final = {};
+    for(var name in company){
+     //console.log(temp)
+      var temp = name;
+      var temp1 = temp.replaceAll(",","");
+      var temp2 = temp1.replaceAll("-"," ");
+      var temp3 = temp2.replaceAll("@","");
+      var temp4 = temp3.replaceAll("www.","");
+      var temp5 = temp4.replaceAll("inc","");
+      var temp6 = temp5.replaceAll(".com","");
+      var temp7 = temp6.replaceAll(".cn/","");
+      var temp8 = temp7.replaceAll(".cn","");
+      var temp9 = temp8.replaceAll(".eu/","");
+      var temp10 = temp9.replaceAll(".eu","");
+      var temp11 = temp10.replaceAll(".","");
+      var temp12 = temp11.replaceAll("https://","");
+      var temp13 = temp12.replaceAll("http://","");
+      var temp14 = temp13.replaceAll(/\(.*?\)/g, '' );
+      var temp15 = temp14.replaceAll(/\{.*?\}/g, '' );
+      var temp16 = (temp15.replaceAll("Inc","")).trim();
+      if(final[temp16]===undefined){
+        final[temp16] = 0;
+      }
+      final[temp16] += Number(company[name]);
+    } 
+    //console.log(final);
+    var result = {};
+    for(var name in final){
+      result[name.toLowerCase()] = 0;
+    }
+    for(var name in final){
+      for(var resultname in result){
+        if(resultname===' '||resultname===''){
+          continue;
+        }
+        if(name.toString().toUpperCase().search(resultname.toUpperCase()) !== -1){
+          result[resultname]+=Number(final[name]);
+        }
+      }
+    }
+    
+    //console.log(result);
+    var finalresult = {}
+    for(var t in result){
+      if(result[t]>1){
+        var firstLetter = t.toString().substring(0, 1);
+        finalresult[firstLetter.toUpperCase() + t.toString().substring(1)] = Number(result[t]);
+      }
+    }
+    res.status(201).json(finalresult)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
 
 module.exports = {
   GetMessage,
@@ -1157,4 +1213,5 @@ module.exports = {
   GetAllIssues,
   GetCertainCommitter,
   DesignAnalysis,
+  CompanyInfo
 };
