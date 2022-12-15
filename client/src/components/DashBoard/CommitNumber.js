@@ -37,7 +37,6 @@ export default function CommitNumber(data) {
   for(var commit in data){
     total+=data[commit]
   }
-  console.log(data)
 
   return (
     <RootStyle>

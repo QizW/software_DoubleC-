@@ -39,7 +39,6 @@ const Contribute = ({ name, contributions, followers }) => {
     },
   ];
 
-  //
   const chartOptionsFollowers = merge(BaseOptionChart(), {
     tooltip: {
       marker: { show: false },

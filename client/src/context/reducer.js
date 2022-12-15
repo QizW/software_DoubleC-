@@ -1,3 +1,4 @@
+import AllCommits from "../components/DashBoard/AllCommits";
 import {
   DISPLAY_ALERT,
   CLEAR_ALERT,
@@ -21,6 +22,8 @@ import {
   HANDLE_CHANGE,
   CLEAR_FILTERS,
   CHANGE_PAGE,
+  GET_ALL_COMMITS_BEGIN,
+  GET_ALL_COMMITS_SUCCESS,
 } from "./actions";
 import { initialState } from "./appContext";
 
@@ -159,6 +162,17 @@ const reducer = (state, action) => {
       alertType: "success",
       alertText: "Repo delete successfully!",
     };
+  }
+
+  if (action.type === GET_ALL_COMMITS_BEGIN) {
+    return {...state, isLoading: true};
+  }
+  if (action.type === GET_ALL_COMMITS_SUCCESS){
+    return {
+      ...state,
+      isLoading: false,
+      allCommits: action.payload.allCommits,
+    }
   }
 
   if (action.type === CHANGE_PAGE) {

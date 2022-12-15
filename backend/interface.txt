@@ -525,3 +525,13 @@
         "2022-11-29": 3,
     }
 }
+
+/CompanyInfo 获取company信息
+{
+    id 仓库id,
+}
+返回                    前为公司名，后为数量
+{
+    "Google": 25,
+    "Facebook": 82
+}

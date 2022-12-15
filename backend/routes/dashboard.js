@@ -18,7 +18,7 @@ const {
   GetAllIssues,
   GetCertainCommitter,
 
-
+  CompanyInfo,
   DesignAnalysis,
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
@@ -37,8 +37,9 @@ router.route("/GetCertainIssue").post(GetCertainIssue)
 router.route("/GetAllCommits").post(GetAllCommits)
 router.route("/GetAllIssues").post(GetAllIssues)
 router.route("/GetCertainCommitter").post(GetCertainCommitter)
+router.route("/DesignAnalysis").post(DesignAnalysis)
+router.route("/CompanyInfo").post(CompanyInfo)
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);
 
-router.route("/DesignAnalysis").post(DesignAnalysis)
 module.exports = router;
