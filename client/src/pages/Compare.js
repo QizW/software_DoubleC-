@@ -267,15 +267,18 @@ function GetDateDiff(startTime, endTime, diffType) {
         var dir = {}
         dir.name = Crepo[i]
         if(sort === 1)
-          dir.day = -GetDateDiff(keys[j], keys[0], "day")
+          dir.day = -GetDateDiff(keys[j], keys[0], "day") + 1
         else
-          dir.day = GetDateDiff(keys[0], keys[j], "day")
+          dir.day = GetDateDiff(keys[0], keys[j], "day") + 1
         dir.number = infolist[i][keys[j]].toString()
         answer.push(dir)
       }
     }
     answer = NameAnalysis(answer)
-    Cominfo = [{"name":answer[0].name, "day" : 0, "number": 0},...answer.sort(function(a,b){return parseInt(a.day)-parseInt(b.day)})]
+    for(var i=0; i<Crepo.length; i++)
+    {
+      Cominfo = [{"name":Crepo[i].name, "day" : 0, "number": 0},...answer.sort(function(a,b){return parseInt(a.day)-parseInt(b.day)})]
+    }
     console.log(Cominfo)
   }
 
