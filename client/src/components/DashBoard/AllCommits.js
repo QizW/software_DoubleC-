@@ -1,7 +1,9 @@
 import { merge } from "lodash";
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
+// material
 import { Card, CardHeader, Box } from "@mui/material";
+//
 import axios from "axios";
 import BaseOptionChart from "./BaseOptionChart";
 import Loading from "../Loading";
@@ -28,38 +30,50 @@ import {
   import { Icon } from "@iconify/react";
   import { DatePicker, DateRangePicker } from "@mui/lab";
   import { LocalizationProvider } from "@mui/lab";
-  import DevelopingSpeedChart from "./DevelopingSpeedChart";
-const authFetch = axios.create({
-  baseURL: "http://localhost:4538/",
-});
+  const { RangePicker } = DatePicker;
+// ----------------------------------------------------------------------
 
-const DevelopingSpeed = (id) => {
+    const authFetch = axios.create({
+        baseURL: "http://localhost:4538/",
+    });
+const AllCommits = (id) => {
+    // useEffect(() => {
+    //     getAllCommits(id,"1900-1-1","3000-1-1");
+    // },[])
+
+    // var {
+    //     //getAllCommits,
+    //     allCommits,
+    //     isLoading,
+    // } = useAppContext();
+
     
-  const [beginTime,SetBeginTime] = useState("");
-  const [endTime,SetEndTime] = useState("");
-  const [developingSpeed,SetDevelopingSpeed] = useState({});
+    const [beginTime,SetBeginTime] = useState("");
+    const [endTime,SetEndTime] = useState("");
+    const [allCommits,SetAllCommits] = useState({});
 
-  const handleBeginTime = (e) => {
-      SetBeginTime(e.target.value);
-  }
-
-  const handleEndTime = (e) => {
-      SetEndTime(e.target.value);
-  }
-
-  const handleSubmit = async () => {
-      const ID = id.id;
-      try{
-          var tmp  = await authFetch.post("/GetCommunityDevelopment",{"id":ID , "begin":beginTime, "end":endTime});
-          SetDevelopingSpeed(tmp.data);
-      }
-      catch(error){
-          alert(error)
-      }
+    const handleBeginTime = (e) => {
+        SetBeginTime(e.target.value);
     }
-  
-  return (
-    <Box sx={{ flexGrow: 1, mt: 2 }}>
+
+    const handleEndTime = (e) => {
+        SetEndTime(e.target.value);
+    }
+
+    const handleSubmit = async () => {
+        const ID = id.id;
+        try{
+            var tmp = await authFetch.post("/GetAllCommits",{"id":ID , "begin":beginTime, "end":endTime})
+            SetAllCommits(tmp.data)
+        }
+        catch(error){
+            alert(error)
+        }  
+    }
+        return (
+          
+            <>
+              <Box sx={{ flexGrow: 1, mt: 2 }}>
                 <AppBar
                   position="static"
                   color=""
@@ -99,10 +113,11 @@ const DevelopingSpeed = (id) => {
                     输入格式：2020-01-01
                   </Toolbar>
                 </AppBar>
-                <DevelopingSpeedChart data={developingSpeed}/>
+                  <AllCommitsChart data = {allCommits}/>
               </Box>
-    
-  );
+              </>
+              
+            )
 };
 
-export default DevelopingSpeed;
+export default AllCommits;

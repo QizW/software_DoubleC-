@@ -9,7 +9,6 @@ import BaseOptionChart from "./BaseOptionChart";
 // ----------------------------------------------------------------------
 
 const IssueFrequency = (data) => {
-  console.log(data)
   var labels = [],
     number = [];
   for (var interval in data) {
