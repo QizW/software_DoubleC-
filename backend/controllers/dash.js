@@ -7,7 +7,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -761,10 +761,11 @@ const ComCompare = async(req, res)=>{
       for(var i=0; i<repo.length; i++)
       {
         answer.push({})
+        answer[i]['name'] = repo[i].name
         answer[i]['forks'] = repo[i].forks
         answer[i]['stars'] = repo[i].stars
         answer[i]['open_issues'] = repo[i].open_issues
-        answer[i]['community_contributor '] = repo[i].community.contributor
+        answer[i]['community_contributor'] = repo[i].community.contributor
         answer[i]['community_issuer'] = repo[i].community.issuer
       }
     }
