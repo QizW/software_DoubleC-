@@ -2,24 +2,22 @@ import { merge } from "lodash";
 import ReactApexChart from "react-apexcharts";
 import { fNumber } from "../../utils/formatNumber";
 import { Card, CardHeader, Box } from "@mui/material";
-//
 import BaseOptionChart from "./BaseOptionChart";
 
-// ----------------------------------------------------------------------
-
-const AllCommitsChart = (data) => {
-    var name = [];
-    var commitTimes = [];
+const IssueAnalyzeChart = (data) => {
+    console.log(data)
     const Data = data.data
+    var date = [];
+    var value = [];
     for (var it in Data) {
-        name.push(it);
-        commitTimes.push(Data[it])
+        date.push(it);
+        value.push(Data[it])
     }
 
   // 图的数据来源
   const CHART_DATA_CONTRIBUTIONS = [
     {
-      data: commitTimes
+      data: value
     },
   ];
   // 图的格式
@@ -29,7 +27,7 @@ const AllCommitsChart = (data) => {
       y: {
         formatter: (seriesName) => fNumber(seriesName),
         title: {
-          formatter: () => `#commit times`,
+          formatter: () => `#Issue Times`,
         },
       },
     },
@@ -37,19 +35,19 @@ const AllCommitsChart = (data) => {
       bar: { horizontal: true, barHeight: "28%", borderRadius: 2 },
     },
     xaxis: {
-      categories: name,
+      categories: date,
     },
   });
-  if(commitTimes.length!=0){
+  if(value.length!=0){
     return (
       <Card>
-        <CardHeader title="Commits Number" />
+        <CardHeader title="Issue Analyze Result" />
         <Box sx={{ mx: 3 }} dir="ltr">
           <ReactApexChart
             type="bar"
             series={CHART_DATA_CONTRIBUTIONS}
             options={chartOptionsContributions}
-            height={40*commitTimes.length}
+            height={364}
           />
         </Box>
       </Card>
@@ -57,7 +55,7 @@ const AllCommitsChart = (data) => {
   }else{
     return (
       <Card>
-        <CardHeader title="Commits Number" />
+        <CardHeader title="Issue Analyze Result" />
         <Box sx={{ mx: 3 }} dir="ltr">
           <h2>时间范围内无数据</h2>
         </Box>
@@ -67,4 +65,4 @@ const AllCommitsChart = (data) => {
  
 };
 
-export default AllCommitsChart;
+export default IssueAnalyzeChart;

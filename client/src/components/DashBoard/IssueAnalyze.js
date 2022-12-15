@@ -22,20 +22,19 @@ import {
     DialogActions,
   } from "@mui/material";
   import { useState, useEffect } from "react";
-  import Alert from "../Alert";
-  import FormRow from "../../components/FormRow";
-  import { useAppContext } from "../../context/appContext";
   import { Icon } from "@iconify/react";
   import { DatePicker, DateRangePicker } from "@mui/lab";
-  import { LocalizationProvider } from "@mui/lab";
-  const { RangePicker } = DatePicker;
+  import IssueAnalyzeChart from "./IssueAnalyzeChart";
     const authFetch = axios.create({
         baseURL: "http://localhost:4538/",
     });
-const AllCommits = (id) => {
+    
+
+const IssueAnalyze = (id) => {
     const [beginTime,SetBeginTime] = useState("");
     const [endTime,SetEndTime] = useState("");
-    const [allCommits,SetAllCommits] = useState({});
+    const [keyword,SetKeyword] = useState("");
+    const [issueInfo,SetIssueInfo] = useState("");
 
     const handleBeginTime = (e) => {
         SetBeginTime(e.target.value);
@@ -45,18 +44,21 @@ const AllCommits = (id) => {
         SetEndTime(e.target.value);
     }
 
+    const handleKeyword = (e) => {
+        SetKeyword(e.target.value);
+    }
+
     const handleSubmit = async () => {
         const ID = id.id;
         try{
-            var tmp = await authFetch.post("/GetAllCommits",{"id":ID , "begin":beginTime, "end":endTime})
-            SetAllCommits(tmp.data)
+            var tmp = await authFetch.post("/GetCertainIssue",{"id":ID , "begin":beginTime, "end":endTime,"keyword":issueInfo});
+            SetIssueInfo(tmp.data)
         }
         catch(error){
             alert(error)
         }  
     }
         return (
-          
             <>
               <Box sx={{ flexGrow: 1, mt: 2 }}>
                 <AppBar
@@ -88,6 +90,16 @@ const AllCommits = (id) => {
                         label="SearchRepos"
                       />
                     </FormControl>
+                    <FormControl sx={{ m: 1, width: "20ch" }} variant="outlined">
+                      <InputLabel>keyword</InputLabel>
+                      <OutlinedInput
+                        id="search-repos"
+                        type="text"
+                        value={keyword}
+                        onChange={handleKeyword}
+                        label="SearchRepos"
+                      />
+                    </FormControl>
                     <Box sx={{ flexGrow: 1 }} />
                     <IconButton
                         aria-label="search"
@@ -98,11 +110,10 @@ const AllCommits = (id) => {
                     输入格式：2020-01-01
                   </Toolbar>
                 </AppBar>
-                  <AllCommitsChart data = {allCommits}/>
+                  <IssueAnalyzeChart data = {issueInfo}/>
               </Box>
               </>
-              
             )
 };
 
-export default AllCommits;
+export default IssueAnalyze;

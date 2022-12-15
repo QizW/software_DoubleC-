@@ -18,6 +18,7 @@ import {
 } from "../components/DashBoard";
 import DevelopingSpeed from "../components/DashBoard/DevelopingSpeed";
 import AllCommits from "../components/DashBoard/AllCommits";
+import IssueAnalyze from "../components/DashBoard/IssueAnalyze";
 
 export default function DashboardApp() {
   useEffect(() => {
@@ -94,6 +95,9 @@ export default function DashboardApp() {
             </Grid>
             <Grid item xs={12} sm={6} md={12}>
               <AllCommits id={id}/>
+            </Grid>
+            <Grid item xs={12} sm={6} md={12}>
+              <IssueAnalyze id={id}/>
             </Grid>
             {contributors && (
               <Grid item xs={12} sm={6} md={12}>
