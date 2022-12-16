@@ -8,6 +8,7 @@ import RepoInfo from "./RepoInfo";
 const MyRepo = ({ _id, owner, name, stars, uploaded_time }) => {
   const { deleteRepo } = useAppContext();
 
+  console.log(_id)
   let date = moment(uploaded_time);
   date = date.format("MMM Do,YYYY");
 

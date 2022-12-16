@@ -11,9 +11,14 @@ const AllCommitsChart = (data) => {
     var name = [];
     var commitTimes = [];
     const Data = data.data
+    var count = 0;
     for (var it in Data) {
+      if(count==20){
+        break;
+      }
         name.push(it);
         commitTimes.push(Data[it])
+        count++;
     }
 
   // 图的数据来源

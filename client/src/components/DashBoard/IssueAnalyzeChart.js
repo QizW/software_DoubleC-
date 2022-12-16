@@ -31,11 +31,13 @@ const IssueAnalyzeChart = (data) => {
       },
     },
     plotOptions: {
-      bar: { horizontal: true, barHeight: "28%", borderRadius: 2 },
+      bar: { horizontal: false, barHeight: "28%", borderRadius: 2 },
     },
     xaxis: {
       categories: date,
+      type: "datetime",
     },
+    fill: { type: ["gradient"] },
   });
   if(value.length!=0){
     return (

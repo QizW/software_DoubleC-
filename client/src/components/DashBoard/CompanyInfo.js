@@ -34,6 +34,9 @@ import CompanyInfoChart from "./CompanyInfoChart";
         baseURL: "http://localhost:4538/",
     });
 const CompanyInfo = (id) => {
+  useEffect(() => {
+    handleSubmit()
+}, []);
     const [beginTime,SetBeginTime] = useState("");
     const [endTime,SetEndTime] = useState("");
     const [allCommits,SetAllCommits] = useState({});

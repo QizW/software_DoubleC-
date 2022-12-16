@@ -22,48 +22,49 @@ import {
     DialogActions,
   } from "@mui/material";
   import { useState, useEffect } from "react";
+  import Alert from "../Alert";
+  import FormRow from "../FormRow";
+  import { useAppContext } from "../../context/appContext";
   import { Icon } from "@iconify/react";
   import { DatePicker, DateRangePicker } from "@mui/lab";
-  import IssueAnalyzeChart from "./IssueAnalyzeChart";
-    const authFetch = axios.create({
-        baseURL: "http://localhost:4538/",
-    });
-    
+  import { LocalizationProvider } from "@mui/lab";
+  import DevelopingSpeedChart from "./DevelopingSpeedChart";
+  import CommitFrequency from "./CommitFrequency";
+const authFetch = axios.create({
+  baseURL: "http://localhost:4538/",
+});
 
-const IssueAnalyze = (id) => {
+const CommitFrequencyData = (id) => {
   useEffect(() => {
-    handleSubmit()
-}, []);
-    const [beginTime,SetBeginTime] = useState("");
-    const [endTime,SetEndTime] = useState("");
-    const [keyword,SetKeyword] = useState("");
-    const [issueInfo,SetIssueInfo] = useState("");
+      handleSubmit()
+  }, []);
 
-    const handleBeginTime = (e) => {
-        SetBeginTime(e.target.value);
-    }
+  const [beginTime,SetBeginTime] = useState("");
+  const [endTime,SetEndTime] = useState("");
+  const [developingSpeed,SetDevelopingSpeed] = useState({});
 
-    const handleEndTime = (e) => {
-        SetEndTime(e.target.value);
-    }
+  const handleBeginTime = (e) => {
+      SetBeginTime(e.target.value);
+  }
 
-    const handleKeyword = (e) => {
-        SetKeyword(e.target.value);
-    }
+  const handleEndTime = (e) => {
+      SetEndTime(e.target.value);
+  }
 
-    const handleSubmit = async () => {
-        const ID = id.id;
-        try{
-            var tmp = await authFetch.post("/GetCertainIssue",{"id":ID , "begin":beginTime, "end":endTime,"keyword":keyword});
-            SetIssueInfo(tmp.data)
-        }
-        catch(error){
-            alert(error)
-        }  
+  const handleSubmit = async () => {
+      const ID = id.id;
+      try{
+        console.log({"id":ID , "begin":beginTime, "end":endTime})
+          var tmp  = await authFetch.post("/GetCommitDevelopment",{"id":ID , "begin":beginTime, "end":endTime});
+          SetDevelopingSpeed(tmp.data);
+      }
+      catch(error){
+          alert(error)
+      }
     }
-        return (
-            <>
-              <Box sx={{ flexGrow: 1, mt: 2 }}>
+  
+  return (
+    <Box sx={{ flexGrow: 1, mt: 2 }}>
                 <AppBar
                   position="static"
                   color=""
@@ -93,16 +94,6 @@ const IssueAnalyze = (id) => {
                         label="SearchRepos"
                       />
                     </FormControl>
-                    <FormControl sx={{ m: 1, width: "20ch" }} variant="outlined">
-                      <InputLabel>keyword</InputLabel>
-                      <OutlinedInput
-                        id="search-repos"
-                        type="text"
-                        value={keyword}
-                        onChange={handleKeyword}
-                        label="SearchRepos"
-                      />
-                    </FormControl>
                     <Box sx={{ flexGrow: 1 }} />
                     <IconButton
                         aria-label="search"
@@ -110,13 +101,12 @@ const IssueAnalyze = (id) => {
                         >
                         <Icon icon="eva:search-outline" color="#2cb1bc" />
                     </IconButton>
-                    输入格式：2020-01-01
                   </Toolbar>
                 </AppBar>
-                  <IssueAnalyzeChart data = {issueInfo}/>
+                <CommitFrequency data={developingSpeed}/>
               </Box>
-              </>
-            )
+    
+  );
 };
 
-export default IssueAnalyze;
+export default CommitFrequencyData;
