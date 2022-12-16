@@ -31,6 +31,9 @@ import {
     
 
 const IssueAnalyze = (id) => {
+  useEffect(() => {
+    handleSubmit()
+}, []);
     const [beginTime,SetBeginTime] = useState("");
     const [endTime,SetEndTime] = useState("");
     const [keyword,SetKeyword] = useState("");

@@ -30,18 +30,19 @@ import {
   import { LocalizationProvider } from "@mui/lab";
   import DevelopingSpeedChart from "./DevelopingSpeedChart";
   import CommitFrequency from "./CommitFrequency";
+  import DesignAna from "./DesignAnalasis"
 const authFetch = axios.create({
   baseURL: "http://localhost:4538/",
 });
 
-const CommitFrequencyData = (id) => {
-  useEffect(() => {
-      handleSubmit()
-  }, []);
+const DesignAnalasisDatas = (id) => {
+    useEffect(() => {
+        handleSubmit()
+    }, []);
 
   const [beginTime,SetBeginTime] = useState("");
   const [endTime,SetEndTime] = useState("");
-  const [developingSpeed,SetDevelopingSpeed] = useState({});
+  const [developingSpeed,SetDevelopingSpeed] = useState([]);
 
   const handleBeginTime = (e) => {
       SetBeginTime(e.target.value);
@@ -55,8 +56,17 @@ const CommitFrequencyData = (id) => {
       const ID = id.id;
       try{
         console.log({"id":ID , "begin":beginTime, "end":endTime})
-          var tmp  = await authFetch.post("/GetCommitDevelopment",{"id":ID , "begin":beginTime, "end":endTime});
-          SetDevelopingSpeed(tmp.data);
+          var tmp  = await authFetch.post("/DesignAnalysis",{"id":ID , "begin":beginTime, "end":endTime});
+          const data = tmp.data;
+          var res=[]
+          for (var i in data){
+            const tmpJson = data[i]
+            for(var j in tmpJson){
+                res.push({day:j,value:tmpJson[j],category:i})
+            }
+          }
+          console.log(res)
+          SetDevelopingSpeed(res);
       }
       catch(error){
           alert(error)
@@ -103,10 +113,10 @@ const CommitFrequencyData = (id) => {
                     </IconButton>
                   </Toolbar>
                 </AppBar>
-                <CommitFrequency data={developingSpeed}/>
+                <DesignAna data={developingSpeed}/>
               </Box>
     
   );
 };
 
-export default CommitFrequencyData;
+export default DesignAnalasisDatas;

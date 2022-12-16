@@ -34,7 +34,9 @@ const authFetch = axios.create({
 });
 
 const DevelopingSpeed = (id) => {
-    console.log(id)
+  useEffect(() => {
+    handleSubmit()
+}, []);
   const [beginTime,SetBeginTime] = useState("");
   const [endTime,SetEndTime] = useState("");
   const [developingSpeed,SetDevelopingSpeed] = useState({});

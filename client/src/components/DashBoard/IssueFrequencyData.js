@@ -36,6 +36,9 @@ const authFetch = axios.create({
 });
 
 const IssueFrequencyData = (id) => {
+  useEffect(() => {
+    handleSubmit()
+}, []);
   const [beginTime,SetBeginTime] = useState("");
   const [endTime,SetEndTime] = useState("");
   const [developingSpeed,SetDevelopingSpeed] = useState({});

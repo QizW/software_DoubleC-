@@ -30,10 +30,10 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
 // 目前设定的commit值为定值
 
 
-export default function CommitNumber(data) {
+export default function CommitNumber(Data) {
   //计算commit总数
+  const data = Data.total
   var total = 0;
-
   for(var commit in data){
     total+=data[commit]
   }

@@ -48,6 +48,7 @@ const DevelopingSpeedChart = (data) => {
         },
         xaxis: {
           categories: date,
+          type: "datetime",
         },
       });
     if(ds.length!=0){

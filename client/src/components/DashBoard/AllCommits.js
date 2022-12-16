@@ -33,6 +33,9 @@ import {
         baseURL: "http://localhost:4538/",
     });
 const AllCommits = (id) => {
+  useEffect(() => {
+    handleSubmit()
+}, []);
     const [beginTime,SetBeginTime] = useState("");
     const [endTime,SetEndTime] = useState("");
     const [allCommits,SetAllCommits] = useState({});

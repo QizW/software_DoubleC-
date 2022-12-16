@@ -22,6 +22,7 @@ import AllCommits from "../components/DashBoard/AllCommits";
 import IssueAnalyze from "../components/DashBoard/IssueAnalyze";
 import CommitFrequencyData from "../components/DashBoard/CommitFrequencyData";
 import IssueFrequencyData from "../components/DashBoard/IssueFrequencyData";
+import DesignAnalasisDatas from "../components/DashBoard/DesignAnalasisData";
 
 export default function DashboardApp() {
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function DashboardApp() {
         <Box>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <CommitNumber id={id}/>
+              <CommitNumber total={commit_frequency}/>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <IssueNumber total={open_issues} />
@@ -99,6 +100,9 @@ export default function DashboardApp() {
             </Grid>
             <Grid item xs={12} sm={6} md={12}>
               <AllCommits id={id}/>
+            </Grid>
+            <Grid item xs={12} sm={6} md={12}>
+              <DesignAnalasisDatas id={id}/>
             </Grid>
             <Grid item xs={12} sm={6} md={12}>
               <IssueAnalyze id={id}/>
