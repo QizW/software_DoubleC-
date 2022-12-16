@@ -69,15 +69,6 @@ const Contribute = ({ name, contributions, followers }) => {
           height={364}
         />
       </Box>
-      <CardHeader title="Followers Rank ( followers of contributors )" />
-      <Box sx={{ mx: 3 }} dir="ltr">
-        <ReactApexChart
-          type="bar"
-          series={CHART_DATA_FOLLOWERS}
-          options={chartOptionsFollowers}
-          height={364}
-        />
-      </Box>
     </Card>
   );
 };
