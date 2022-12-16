@@ -48,8 +48,8 @@ export default function PytorchAnalysis() {
   const [detail,setDetail] = useState({});
   const handleSubmit = async () => {
     try{
-      console.log({id:"63973b6579b0905501ff42a7"})
-      var tmp = await authFetch.post("/dashboard",{id:"63973b6579b0905501ff42a7"});
+      console.log({id:"63981728399f1e9bbd21d89b"})
+      var tmp = await authFetch.post("/dashboard",{id:"63981728399f1e9bbd21d89b"});
       setDetail(tmp.data.detail)
       console.log(detail)
     }
@@ -63,13 +63,13 @@ export default function PytorchAnalysis() {
       <Toolbar sx={{ mt: 1 }}>
       </Toolbar>
         <Grid item xs={12} sm={6} md={12}>
-          <AllCommits id={"63973b6579b0905501ff42a7"}/>
+          <AllCommits id={"63981728399f1e9bbd21d89b"}/>
         </Grid>
         <Grid item xs={12} sm={6} md={12}>
-          <IssueAnalyze id={"63973b6579b0905501ff42a7"}/>
+          <IssueAnalyze id={"63981728399f1e9bbd21d89b"}/>
         </Grid>
         <Grid item xs={12} sm={6} md={12}>
-          <CompanyInfo id={"63973b6579b0905501ff42a7"}/>
+          <CompanyInfo id={"63981728399f1e9bbd21d89b"}/>
         </Grid>
     </Box>
   );

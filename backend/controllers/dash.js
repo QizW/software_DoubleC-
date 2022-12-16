@@ -899,8 +899,20 @@ const GetAllCommits = async(req,res)=>{
         }
       }
     }
-    console.log(result);
-    res.status(201).json(result)
+     var dic = {}
+    // var i = 0;
+    var res2 = Object.keys(result).sort(function(a,b){
+      // console.log(result[a])
+      // console.log(result[b])
+      return result[b]-result[a];
+    });
+    //console.log("------------------res2---------------\n"+res2+"------------------res2---------------\n");
+    for(var name in res2){
+      //console.log(res2[name])
+      dic[res2[name]] = Number(result[res2[name]]);
+    }
+    console.log(dic)
+    res.status(201).json(dic)
   }
   catch(err)
   {
