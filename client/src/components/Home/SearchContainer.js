@@ -27,6 +27,7 @@ const initialRepoInfo = {
 };
 
 const SearchContainer = () => {
+  const _id = "63981728399f1e9bbd21d89b"
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [repoInfo, setRepoInfo] = useState(initialRepoInfo);
@@ -112,6 +113,9 @@ const SearchContainer = () => {
               <Button color="primary" onClick={toggleRepos}>
                 {viewMyRepos ? "view all repos" : "view my repos"}
               </Button>
+              {/* <Link to={`/analyze/${_id}`} className="btn edit-btn">
+                Analyze PyTorch
+              </Link> */}
               <Link to={`/analyzePytorch`} className="btn edit-btn">
                 Analyze PyTorch
               </Link>

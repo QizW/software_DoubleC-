@@ -8,7 +8,8 @@ import BaseOptionChart from "./BaseOptionChart";
 
 // ----------------------------------------------------------------------
 
-const IssueFrequency = (data) => {
+const IssueFrequency = (Data) => {
+ const data = Data.data
   var labels = [],
     number = [];
   for (var interval in data) {
