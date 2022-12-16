@@ -17,9 +17,10 @@ const {
   GetAllCommits,
   GetAllIssues,
   GetCertainCommitter,
-
+  GetCommitDevelopment,
   CompanyInfo,
   DesignAnalysis,
+  GetIssueDevelopment,
 } = require("../controllers/dash");
 const { CheckUser, CreateUser,Getuserinfo} = require("../controllers/user");
 
@@ -39,6 +40,8 @@ router.route("/GetAllIssues").post(GetAllIssues)
 router.route("/GetCertainCommitter").post(GetCertainCommitter)
 router.route("/DesignAnalysis").post(DesignAnalysis)
 router.route("/CompanyInfo").post(CompanyInfo)
+router.route("/GetCommitDevelopment").post(GetCommitDevelopment)
+router.route("/GetIssueDevelopment").post(GetIssueDevelopment)
 //获取用户信息
 router.route("/getuser").post(Getuserinfo);
 

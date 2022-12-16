@@ -9,7 +9,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -424,6 +424,98 @@ const GetCommunityDevelopment = async(req,res)=>{
           result[commit[i].date] = 0;
         }
         result[commit[i].date] += Number(commit[i].sum);
+      }
+    }
+    var final = result;
+    var length = 0;
+    for(var obj in result){
+      length++;
+    }
+    if(length>50){
+      final = CountbyWeek(result)
+    }
+    length = 0;
+    for(var obj in final){
+      length++;
+    }
+    if(length>50){
+      final = CountbyMonth(result)
+    }
+    //console.log(final)
+    res.status(201).json(final)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
+const GetCommitDevelopment = async(req,res)=>{
+  try{
+    var result = {}
+    const info = req.body
+    const repo = await RepoSchema.find({_id : info.id})
+    const commit = repo[0].commit_frequency;
+    var begin = info.begin;
+    var end = info.end;
+    if(begin === ''){
+      begin = '1970-01-01';
+    }
+    if(end === ''){
+      end = '2024-01-01';
+    }
+    for ( var i = 0; i <commit.length; i++){
+      if(commit[i].date >= begin && commit[i].date <= end){
+        if(result[commit[i].date]===undefined){
+          result[commit[i].date] = 0;
+        }
+        result[commit[i].date] += Number(commit[i].sum);
+      }
+    }
+    var final = result;
+    var length = 0;
+    for(var obj in result){
+      length++;
+    }
+    if(length>50){
+      final = CountbyWeek(result)
+    }
+    length = 0;
+    for(var obj in final){
+      length++;
+    }
+    if(length>50){
+      final = CountbyMonth(result)
+    }
+    //console.log(final)
+    res.status(201).json(final)
+  }
+  catch(err)
+  {
+    res.status(404).json(err)
+  }
+}
+const GetIssueDevelopment = async(req,res)=>{
+  try{
+    var result = {}
+    const info = req.body
+    const repo = await RepoSchema.find({_id : info.id})
+    const issue = repo[0].issue_frequency;
+    var begin = info.begin;
+    var end = info.end;
+    if(begin === ''){
+      begin = '1970-01-01';
+    }
+    if(end === ''){
+      end = '2024-01-01';
+    }
+    for ( var i = 0; i <issue.length; i++){
+      
+      //console.log(result[issue[i].date]);
+      if(issue[i].date >= begin && issue[i].date <= end){
+        if(result[issue[i].date]===undefined){
+          result[issue[i].date] = 0;
+        }
+        result[issue[i].date] += Number(issue[i].sum);
       }
     }
     var final = result;
@@ -1255,5 +1347,7 @@ module.exports = {
   GetAllIssues,
   GetCertainCommitter,
   DesignAnalysis,
-  CompanyInfo
+  CompanyInfo,
+  GetCommitDevelopment,
+  GetIssueDevelopment
 };
