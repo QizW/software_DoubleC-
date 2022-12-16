@@ -9,7 +9,7 @@ const ObjectId = require("mongodb").ObjectId;
 const { Octokit } = require("@octokit/core");
 const res = require("express/lib/response");
 const octokit = new Octokit({
-  auth: `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`, // token
+  auth: `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`, // token
   auto_paginate: true
 });
 
@@ -114,14 +114,13 @@ const SearchRepoName = async (req, res) => {
 //根据id搜索
 const GetDashboard = async (req, res) => {
   try {
-    console.log(req.body)
     const detail = await RepoSchema.findOne({ _id: ObjectId(req.body.id) });
     let commit_frequency=detail.commit_frequency;
     let date_sum_commit={}
     let order={};
     for (let i = 0; i < commit_frequency.length; i++) {
       let date=commit_frequency[i].date.substring(0,10);
-      formalLength = Object.keys(order).length;
+      let formalLength = Object.keys(order).length;
       order[formalLength.toString()] = date;
       date_sum_commit[date]=commit_frequency[i].sum;
     }
@@ -132,13 +131,11 @@ const GetDashboard = async (req, res) => {
     order={};
     for (let i = 0; i < issue_frequency.length; i++) {
       let date=issue_frequency[i].date.substring(0,10);
-      formalLength = Object.keys(order).length;
+      let formalLength = Object.keys(order).length;
       order[formalLength.toString()] = date;
       date_sum_issue[date]=issue_frequency[i].sum;
     }
-    console.log("date_sum_issue",date_sum_issue);
     detail.issue_frequency=date_sum_issue;
-    console.log({detail})
     res.status(201).json({ detail });
   } catch (err) {
     res.status(404).json(err);
@@ -195,19 +192,19 @@ const RepoGetCommitFrequency = async (owner, name) => {
 const CountDayCommit = (Msg) => {
   var order = {};
   var result = {};
-  committer = new Map;
+  let committer = new Map;
   for (var i in Msg.data) {
     var t = Msg.data[i].commit.committer.date.substring(0, 10);
-    formalLength = Object.keys(order).length;
+    let formalLength = Object.keys(order).length;
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
-      temp=new Map;
+      let temp=new Map;
       temp.set(Msg.data[i].commit.author.name,1);
       committer.set(t,temp);
     } else {
       result[t] += 1;
-      temp=committer.get(t);
+      let temp=committer.get(t);
       if (temp.has(Msg.data[i].commit.author.name)){
         temp.set(Msg.data[i].commit.author.name,temp.get(Msg.data[i].commit.author.name)+1);
       }
@@ -264,19 +261,19 @@ const RepoGetIssueFrequency = async (owner, name) => {
 const CountDayIssue = (Msg) => {
   var order = {};
   var result = {};
-  issuer = new Map;
+  let issuer = new Map;
   for (var i in Msg.data) {
     var t = Msg.data[i].created_at.substring(0, 10);
-    formalLength = Object.keys(order).length;
+    let formalLength = Object.keys(order).length;
     if (!(t in result)) {
       order[formalLength.toString()] = t;
       result[t] = 1;
-      temp=new Map;
+      let temp=new Map;
       temp.set(Msg.data[i].user.login,1);
       issuer.set(t,temp);
     } else {
       result[t] += 1;
-      temp=issuer.get(t);
+      let temp=issuer.get(t);
       if (temp.has(Msg.data[i].user.login)){
         temp.set(Msg.data[i].user.login,temp.get(Msg.data[i].user.login)+1);
       }
@@ -590,8 +587,8 @@ const RepoGetIssue = async (owner, name) => {
 };
 
 const RepoGetCompany = async (owner, name) => {
-  company = new Map;
-  user = new Map;
+  let company = new Map;
+  let user = new Map;
   let count=1;
   while (count<=10){
     const NextStargazerMessage = await octokit.request(
@@ -1246,7 +1243,6 @@ const DesignAnalysis = async(req,res)=>{
           }
         }
       }
-      
     }
     //console.log(result);
     var final = {"code":{},"maintainability":{},"testing":{},"robustness":{},"preformance":{},"configuration":{},"documentation":{},"clarification":{}};
@@ -1265,17 +1261,52 @@ const DesignAnalysis = async(req,res)=>{
     res.status(404).json(err)
   }
 }
-
+const NameAnalysis = async()=>{
+  let name = require('../name.json');
+  let new_name=[];
+  let name_day=new Map;
+  for (let i = 0; i < name.length; i++) {
+    if (!name_day.has(name[i].name)){
+      name_day.set(name[i].name,name[i].day);
+      let one_new={
+        name:name[i].name,
+        day:name[i].day,
+        number:name[i].number
+      }
+      new_name.push(one_new)
+    }
+    else {
+      if (name_day.get(name[i].name)+1<name[i].day){
+        for (let j = name_day.get(name[i].name)+1; j < name[i].day; j++) {
+          let one_new={
+            name:name[i].name,
+            day:j,
+            number:"0"
+          }
+          new_name.push(one_new)
+        }
+        let one_new={
+          name:name[i].name,
+          day:name[i].day,
+          number:name[i].number
+        }
+        new_name.push(one_new)
+        name_day.set(name[i].name,name[i].day);
+      }
+    }
+  }
+  console.log("new_name",new_name);
+  return new_name;
+}
 const CompanyInfo = async(req,res)=>{
   try{
     var result = {};
-    console.log(req.body)
     const info = req.body
     const repo = await RepoSchema.find({_id : info.id})
     //console.log(repo[0].company)
     const company = repo[0].company[0];
     
-    console.log(company)
+    //console.log(company)
     var final = {};
     for(var name in company){
      //console.log(temp)
