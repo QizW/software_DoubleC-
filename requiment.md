@@ -22,11 +22,11 @@ Npm会跟随nodejs安装
 
 注:如果想要配置多版本Nodejs环境，则需要卸载掉本地的nodejs，然后通过链接：[<u><span class="15">Releases · coreybutler/nvm-windows (github.com)</span></u>](https://github.com/coreybutler/nvm-windows/releases)安装下载nvm
 
-![](requiment/2022-12-16-23-21-09-image.png)
+![](imgs/2022-12-16-23-21-09-image.png)
 
 安装成功后可以通过 nvm install下载对应版本的Nodejs与配套的npm
 
-#### **React安装方式：**在npm 安装成功后命令行输入npm install -g create-react-app即可下载react，在工程对应文件夹下执行npm install可直接安装配置react
+#### React安装方式：在npm 安装成功后命令行输入npm install -g create-react-app即可下载react，在工程对应文件夹下执行npm install可直接安装配置react
 
 **Mongodb安装方式：**
 
@@ -36,7 +36,7 @@ https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-3.2.21-signed
 
 通过链接安装后执行步骤，结束后在安装路径下创建data\db和data\log两个文件夹，在安装路径下创建mongod.cfg配置文件
 
- ![](requiment/2022-12-16-23-21-20-image.png)
+ ![](imgs/2022-12-16-23-21-20-image.png)
 
 运行安装后服务后可正常使用，具体安装细节可自行网络搜索
 
